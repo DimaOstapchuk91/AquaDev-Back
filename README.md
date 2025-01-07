@@ -24,8 +24,12 @@ This repository contains the backend for the team final project **AquaTracker**,
    git clone git@github.com:DimaOstapchuk91/AquaDev-Back.git
    ```
 2. Install dependencies:
+   ```bash
    npm install
+   ```
 3. Start the server:
+   ```bash
    npm start
+   ```
 
 **AquaDev-Back** provides a robust and functional backend designed with a focus on quality, scalability, and ease of use.

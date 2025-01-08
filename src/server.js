@@ -6,6 +6,7 @@ import allRouters from './routers/index.js';
 import { env } from './utils/env.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import waterRouter from './routers/water.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -30,6 +31,8 @@ export const setupServer = () => {
       message: 'Start page!',
     });
   });
+
+  app.use('/water', waterRouter);
 
   app.use(allRouters);
 

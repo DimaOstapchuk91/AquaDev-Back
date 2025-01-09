@@ -1,10 +1,13 @@
 import { THIRTY_DAY } from '../constans/constans.js';
 import {
+  getUser,
   loginUser,
   logoutUser,
   refreshUserSession,
   registerUser,
+  updateUser,
 } from '../services/users.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary .js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -78,4 +81,38 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie('refreshToken');
 
   res.status(204).end();
+};
+
+export const gerUserController = async (req, res) => {
+  const userData = await getUser(req.user);
+
+  res.status(200).json({
+    status: 200,
+    message: 'User found successfully!',
+    data: userData,
+  });
+};
+
+export const updateUserController = async (req, res) => {
+  const { user } = req;
+  const avatar = req.file;
+
+  let avatarUrl;
+
+  if (avatar) {
+    const result = await uploadToCloudinary(req.file.path);
+
+    avatarUrl = result;
+  }
+
+  const result = await updateUser(user, {
+    ...req.body,
+    avatar: avatarUrl,
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: result.userData,
+  });
 };

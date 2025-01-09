@@ -83,3 +83,33 @@ export const logoutUser = async (cookies) => {
 
   await Session.deleteOne({ _id: sessionId, refreshToken: refreshToken });
 };
+
+export const getUser = async (user) => {
+  const userData = await UsersCollection.findOne({
+    _id: user._id,
+  });
+
+  if (!userData) throw createHttpError(404, 'User not found');
+
+  return userData;
+};
+
+export const updateUser = async (user, userData, options = {}) => {
+  const rawResult = await UsersCollection.findOneAndUpdate(
+    { _id: user._id },
+    userData,
+    {
+      new: true,
+      includeResultMetadata: true,
+      ...options,
+    },
+  );
+
+  if (!rawResult || !rawResult.value)
+    throw createHttpError(404, 'User not found');
+
+  return {
+    userData: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject.upserted),
+  };
+};

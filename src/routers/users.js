@@ -2,13 +2,17 @@ import { Router } from 'express';
 import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { authSchema } from '../validation/users.js';
+import { authSchema, updateUserSchema } from '../validation/users.js';
 import {
+  gerUserController,
   loginUserController,
   logoutUserController,
   refreshUserSessionController,
   registerUserController,
+  updateUserController,
 } from '../controllers/users.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/upload.js';
 
 const jsonParser = express.json();
 
@@ -28,5 +32,14 @@ router.post(
 );
 router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 router.post('/logout', ctrlWrapper(logoutUserController));
+router.get('/data', authenticate, ctrlWrapper(gerUserController));
+router.patch(
+  '/update',
+  authenticate,
+  jsonParser,
+  upload.single('avatar'),
+  validateBody(updateUserSchema),
+  ctrlWrapper(updateUserController),
+);
 
 export default router;

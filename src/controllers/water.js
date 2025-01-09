@@ -3,9 +3,9 @@ import { addWaterPortion, deleteWaterPortion, getWaterPortionById, getWaterPorti
 
 export async function getCurrentDayWaterController(req, res) {
     try {
-        // const userId = req.user._id;
+        const userId = req.user._id;
 
-        const { waterPortions, totalWater } = await getWaterPortionsForDay();
+        const { waterPortions, totalWater } = await getWaterPortionsForDay(userId);
 
         res.status(200).json({
             totalWater,
@@ -18,6 +18,8 @@ export async function getCurrentDayWaterController(req, res) {
 
 export async function getMonthWaterController(req, res) {
     const { year, month } = req.params;
+    const userId = req.user._id;
+
 
     const parsedYear = parseInt(year, 10);
     const parsedMonth = parseInt(month, 10) - 1;
@@ -29,7 +31,7 @@ export async function getMonthWaterController(req, res) {
         return res.status(400).json({ message: 'Invalid year or month' });
     }
 
-    const waterPortionsByDay = await getWaterPortionsForMonth(parsedYear, parsedMonth);
+    const waterPortionsByDay = await getWaterPortionsForMonth(parsedYear, parsedMonth, userId);
     res.status(200).json(waterPortionsByDay);
 }
 
@@ -38,7 +40,7 @@ export async function addWaterPortionController(req, res) {
     const waterPortion = {
         amount: req.body.amount,
         time: req.body.time,
-        // userId: req.user.id
+        userId: req.user._id
     };
 
     const result = await addWaterPortion(waterPortion);

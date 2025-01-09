@@ -3,11 +3,12 @@ import { getEndOfDay, getStartOfDay } from "../utils/getDayBounds.js";
 import { endOfMonth, startOfMonth } from "../utils/getMonthBounds.js";
 
 
-export async function getWaterPortionsForDay() {
+export async function getWaterPortionsForDay(userId) {
     const startOfDay = getStartOfDay();
     const endOfDay = getEndOfDay();
 
     const waterPortions = await WaterPortion.find({
+        userId,
         createdAt: { $gte: startOfDay, $lt: endOfDay },
     }).select('amount time createdAt');
 
@@ -37,11 +38,12 @@ export function deleteWaterPortion(itemId) {
     return WaterPortion.findOneAndDelete({ _id: itemId });
 }
 
-export async function getWaterPortionsForMonth(year, month) {
+export async function getWaterPortionsForMonth(year, month, userId) {
     const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
     const endOfSelectedMonth = endOfMonth(new Date(year, month, 1));
 
     const waterPortions = await WaterPortion.find({
+        userId,
         createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
     }).select('_id amount time createdAt');
 

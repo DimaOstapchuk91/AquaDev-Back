@@ -8,6 +8,7 @@ import {
   updateUser,
 } from '../services/users.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary .js';
+import { getAllUsers } from '../services/users.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -114,5 +115,15 @@ export const updateUserController = async (req, res) => {
     status: 200,
     message: 'Successfully patched a contact!',
     data: result.userData,
+  });
+};
+
+export const getAllUsersController = async (req, res) => {
+  const usersCount = await getAllUsers();
+
+  res.json({
+    status: 200,
+    message: 'Successfully found the amount of users!',
+    usersAmount: usersCount,
   });
 };

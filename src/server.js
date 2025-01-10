@@ -7,7 +7,6 @@ import { env } from './utils/env.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
-import usersRouter from './routers/users.js';
 const PORT = Number(env('PORT', '3000'));
 
 export const setupServer = () => {
@@ -40,7 +39,7 @@ export const setupServer = () => {
       message: 'Start page!',
     });
   });
-  
+
   app.use(allRouters);
 
   app.use('*', notFoundHandler);

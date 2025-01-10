@@ -43,5 +43,5 @@ router.patch(
   ctrlWrapper(updateUserController),
 );
 
-router.get('/count', getAllUsersController);
+router.get('/count', ctrlWrapper(getAllUsersController));
 export default router;

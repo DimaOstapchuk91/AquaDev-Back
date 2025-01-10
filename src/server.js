@@ -40,7 +40,7 @@ export const setupServer = () => {
       message: 'Start page!',
     });
   });
-  app.use('/users', usersRouter);
+  
   app.use(allRouters);
 
   app.use('*', notFoundHandler);

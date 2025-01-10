@@ -113,3 +113,15 @@ export const updateUser = async (user, userData, options = {}) => {
     isNew: Boolean(rawResult?.lastErrorObject.upserted),
   };
 };
+
+export const getAllUsers = async () => {
+  const usersQuery = UsersCollection.find();
+
+  const usersCount = await UsersCollection.find()
+    .merge(usersQuery)
+    .countDocuments();
+    
+  return {
+    usersAmount: usersCount,
+  };
+};

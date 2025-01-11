@@ -42,7 +42,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully created new water portion
+              example: Water portion is successfully added!
             data:
               $ref: '../../components/schemas/water.yaml'
   '400':

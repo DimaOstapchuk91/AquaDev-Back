@@ -15,18 +15,15 @@ parameters:
 responses:
   '204':
     description: Successfully deleted water portion
-  '404':
-    description: Water portion not found
     content:
       application/json:
         schema:
           type: object
           properties:
-            success:
-              type: boolean
-              example: false
-            error:
+            message:
               type: string
-              example: Water portion not found
+              example: No Content
+  '404':
+    $ref: '../../../components/responses/404.yaml'
   '500':
     $ref: ../../../components/responses/500.yaml 

@@ -33,18 +33,38 @@ responses:
             data:
               type: object
               $ref: '../../../components/schemas/water.yaml'
-  '404':
-    description: Water data not found
+  '400':
+    description: Invalid year or month
     content:
       application/json:
         schema:
           type: object
           properties:
-            success:
-              type: boolean
-              example: false
             error:
               type: string
-              example: 'Contact not found.'
+              example: 'Invalid year or month'
+  '404':
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: NotFoundError
+            data:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Route not found"
+          required:
+            - status
+            - message
+            - data
   '500':
     $ref: '../../../components/responses/500.yaml'

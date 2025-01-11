@@ -11,7 +11,6 @@ servers:
 tags:
   - name: Water
     description: Operations related to water tracking.
-
 components:
   securitySchemes:
     cookieAuth:
@@ -22,17 +21,17 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  schemas:
-    $ref: ../swagger/components/schemas/water.yaml
-
+  
 paths:
   /water/{id}:
-    get:
-      $ref: ../swagger/paths/water/{id}/get.yaml
     delete:
       $ref: ../swagger/paths/water/{id}/delete.yaml
     patch:
-      $ref: ../swagger/paths/water/{id}/patch.yaml
+      $ref: ../swagger/paths/water/{id}/patch.yaml 
+    get:
+      $ref: ../swagger/paths/water/{id}/get.yaml
   /water:
     post:
       $ref: ../swagger/paths/water/post.yaml
+    get: 
+      $ref: ../swagger/paths/water/get.yaml

@@ -1,0 +1,51 @@
+tags:
+  - Water
+summary: Create water tracking data
+operationId: createWaterData
+description: 'Create a water tracking with payload'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - amount
+          - time
+          - userId
+        properties:
+          amount:
+            type: number
+            format: float
+            description: The amount of water consumed
+          time:
+            type: string
+            description: The time when the water was consumed
+          userId:
+            type: string
+            description: The ID of the user who logged the water portion
+responses:
+  '201':
+    description: Successfully created new water portion
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully created new water portion
+            data:
+              $ref: '../../components/schemas/water.yaml'
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

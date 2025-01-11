@@ -1,0 +1,50 @@
+tags:
+  - Water
+summary: 'Get water by id'
+operationId: getWaterById
+description:  Get water tracking data by ID 
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: '65ca67e7ae7f10c88b598384'
+responses:
+  '200':
+    description: Successful retrieval of water tracking data
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successful retrieval of water tracking data
+            data:
+              type: object
+              $ref: '../../../components/schemas/water.yaml'
+  '404':
+    description: Water data not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            error:
+              type: string
+              example: 'Contact not found.'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

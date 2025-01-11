@@ -1,0 +1,72 @@
+tags:
+  - Water
+summary: Update water by ID
+description: Update specific fields of water portion by ID.
+operationId: updateWaterPortion
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    description: ID of the contact to update
+    schema:
+      type: string
+requestBody:
+  description: Fields to update in the contact
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+         amount:
+            type: number
+            format: float
+            description: The amount of water consumed
+         time:
+            type: string
+            description: The time when the water was consumed
+         userId:
+            type: string
+            description: The ID of the user who logged the water portion
+responses:
+  '200':
+    description: Contact updated successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully updated the contact!
+            data:
+              type: object
+              $ref: '../../../components/schemas/water.yaml'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+  '404':
+    description: Water portion not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            error:
+              type: string
+              example: Water portion not found
+  '500':
+    $ref: '../../../components/responses/500.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'

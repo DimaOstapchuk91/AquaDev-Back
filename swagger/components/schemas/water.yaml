@@ -1,0 +1,27 @@
+
+type: object
+required:
+  - amount
+  - time
+  - userId
+properties:
+  amount:
+    type: number
+    format: float
+    description: The amount of water consumed
+  time:
+    type: string
+    format: date-time
+    description: The time when the water was consumed
+  userId:
+    type: string
+    description: The ID of the user who logged the water portion
+#      createdAt:
+#        type: string
+#        format: date-time
+#        description: The timestamp when the record was created
+#      updatedAt:
+#        type: string
+#        format: date-time
+#        description: The timestamp when the record was last updated
+

@@ -4,6 +4,10 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Session } from '../db/models/session.js';
 import { THIRTY_DAY, TWO_HOURS } from '../constans/constans.js';
+import {
+  getFullNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.js';
 
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
@@ -112,4 +116,63 @@ export const updateUser = async (user, userData, options = {}) => {
     userData: rawResult.value,
     isNew: Boolean(rawResult?.lastErrorObject.upserted),
   };
+};
+
+export const loginOrSignupWithGoogle = async (req, res, next) => {
+  try {
+    const { code } = req.body;
+
+    if (!code) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Authorization code is required!',
+      });
+    }
+
+    const ticket = await validateCode(code);
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      return res.status(401).json({
+        status: 401,
+        message: 'Invalid Google OAuth token!',
+      });
+    }
+
+    let user = await UsersCollection.findOne({ email: payload.email });
+
+    if (!user) {
+      user = await UsersCollection.create({
+        email: payload.email,
+        name: getFullNameFromGoogleTokenPayload(payload),
+        password: null,
+      });
+    }
+
+    const session = await createSession(user._id);
+
+    res.cookie('refreshToken', session.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      expires: new Date(session.refreshTokenValidUntil),
+    });
+
+    res.cookie('sessionId', session._id, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      expires: new Date(session.refreshTokenValidUntil),
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully authenticated via Google!',
+      data: {
+        accessToken: session.accessToken,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 };

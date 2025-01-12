@@ -1,0 +1,36 @@
+tags:
+  - Google OAuth
+summary: Login via Google OAuth
+operationId: loginGoogleOAuthUrl
+description: 'Uses a Google OAuth authorization code to log in or register a user'
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/user/loginWithGoogleOAuthSchema.yaml'
+responses:
+  '200':
+    description: 'Successful login or registration via Google OAuth'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully logged in via Google OAuth!
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: 'ya29.a0AfH6SMDk7BlLgU7eBXYu9pC7Hpa5tkQA0hM9d6mmHg5yPtNaXtW4K-dPV9e6-KYjF0e8a8kI'
+    '401':
+      $ref: ../../components/responses/user/401.yaml
+    '500':
+      $ref: ../../components/responses/user/500.yaml

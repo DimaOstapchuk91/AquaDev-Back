@@ -1,0 +1,32 @@
+tags:
+  - Authentication
+summary: Logout User
+operationId: logoutUser
+description: 'Logout the user by invalidating their session and refresh token'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - sessionId
+          - refreshToken
+        properties:
+          sessionId:
+            type: string
+            description: 'Session ID for logging out'
+            example: session_id_123
+          refreshToken:
+            type: string
+            description: 'Refresh token'
+            example: tRRRgqmdISK5vAnu7nESyC4e61KZDGWkplTZ0IQM
+responses:
+  '204':
+    description: 'User logged out successfully'
+  '401':
+    $ref: ../../components/responses/user/401.yaml
+  '500':
+    $ref: ../../components/responses/user/500.yaml

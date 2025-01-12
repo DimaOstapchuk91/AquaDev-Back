@@ -12,6 +12,9 @@ tags:
 servers:
   - url: http://localhost:3000
 paths:
+  /user:
+    get:
+      $ref: ../swagger/paths/user/get.yaml
 
 components:
   securitySchemes:

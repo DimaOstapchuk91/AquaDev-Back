@@ -1,0 +1,51 @@
+tags:
+  - User
+summary: 'Update User Data'
+operationId: 'updateUser'
+description: "Update authenticated user's details, such as email, name, or avatar."
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - email
+          - name
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'updateduser@example.com'
+        name:
+          type: string
+          example: 'Updated Name'
+        avatar:
+          type: string
+          format: binary
+          description: 'Avatar file to upload'
+responses:
+  '200':
+    description: 'User data updated successfully'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              example: 'updateduser@example.com'
+            name:
+              type: string
+              example: 'Updated Name'
+            avatar:
+              type: string
+              example: 'https://example.com/updated-avatar.jpg'
+  '400':
+    $ref: ../../components/responses/user/400.yaml
+  '401':
+    $ref: ../../components/responses/user/401.yaml
+  '404':
+    $ref: ../../components/responses/user/404.yaml

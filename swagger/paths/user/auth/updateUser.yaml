@@ -1,0 +1,50 @@
+tags:
+  - User
+summary: Update User info
+operationId: updateUser
+description: 'Update user details such as email and name.'
+security:
+  - bearerAuth: []
+parameters:
+  - name: userId
+    in: path
+    required: true
+    schema:
+      type: string
+      description: 'Used ID the user to update'
+      example: 'user_id_123'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - name
+        properties:
+          email:
+            type: string
+            format: email
+            example: newemail@example.com
+          name:
+            type: string
+            example: Jane Doe
+responses:
+  '200':
+    description: 'User update successfully'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              example: newemail@example.com
+            name:
+              type: string
+              example: Jane Doe
+  '404':
+    $ref: ../../components/responses/user/404.yaml
+  '500':
+    $ref: ../../components/responses/user/500.yaml

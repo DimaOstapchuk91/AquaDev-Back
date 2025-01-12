@@ -25,11 +25,15 @@ export const loginUserController = async (req, res) => {
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
+    secure: true,
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
+    secure: true,
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 
@@ -43,11 +47,15 @@ export const loginUserController = async (req, res) => {
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
+    secure: true,
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
+    secure: true,
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 };
@@ -62,6 +70,7 @@ export const refreshUserSessionController = async (req, res) => {
 
   res.status(200).json({
     status: 200,
+    secure: true,
     message: 'Successfully refreshed a session',
     data: { accessToken: session.accessToken },
   });

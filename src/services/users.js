@@ -6,8 +6,10 @@ import { Session } from '../db/models/session.js';
 import { THIRTY_DAY, TWO_HOURS } from '../constans/constans.js';
 import {
   getFullNameFromGoogleTokenPayload,
+  googleOAuthClient,
   validateCode,
 } from '../utils/googleOAuth2.js';
+import { GoogleAuth, OAuth2Client } from 'google-auth-library';
 
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
@@ -121,6 +123,16 @@ export const updateUser = async (user, userData, options = {}) => {
 export const loginOrSignupWithGoogle = async (req, res, next) => {
   try {
     const { code } = req.body;
+    const { tokens } = await googleOAuthClient.getToken(code);
+    googleOAuthClient.setCredentials(tokens);
+
+    const oauth2 = GoogleAuth.oauth2({
+      auth: OAuth2Client,
+      version: 'v2',
+    });
+
+    const userInfo = await oauth2.userinfo.get();
+    res.json({ user: userInfo.data });
 
     if (!code) {
       return res.status(400).json({

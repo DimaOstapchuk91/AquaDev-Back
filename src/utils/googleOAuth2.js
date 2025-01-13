@@ -8,7 +8,7 @@ const PATH_JSON = path.join(process.cwd(), 'src', 'google-oauth.json');
 
 const oauthConfig = JSON.parse(await readFile(PATH_JSON));
 
-const googleOAuthClient = new OAuth2Client({
+export const googleOAuthClient = new OAuth2Client({
   clientId: env('GOOGLE_AUTH_CLIENT_ID'),
   clientSecret: env('GOOGLE_AUTH_CLIENT_SECRET'),
   redirectUri: oauthConfig.web.redirect_uris[0],
@@ -16,6 +16,7 @@ const googleOAuthClient = new OAuth2Client({
 
 export const generateAutUrl = () =>
   googleOAuthClient.generateAuthUrl({
+    access_type: 'offline',
     scope: [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile',

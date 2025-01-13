@@ -16,6 +16,23 @@ export const registerUser = async (payload) => {
   });
 };
 
+// ==============================================
+
+const createSession = () => {
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  return {
+    accessToken,
+    refreshToken,
+    // accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
+    accessTokenValidUntil: new Date(Date.now() + 60 * 1000),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
+  };
+};
+
+// ==============================================
+
 export const loginUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
 
@@ -27,31 +44,12 @@ export const loginUser = async (payload) => {
   if (!isPasswordMatch)
     throw createHttpError(401, 'Authentication failed. Invalid password');
 
-  await Session.deleteOne({ userId: user._id });
+  const newSession = createSession();
 
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
-
-  return await Session.create({
-    userId: user._id,
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
-    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
-  });
+  return await Session.create({ userId: user._id, ...newSession });
 };
 
-const createSession = () => {
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
-
-  return {
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
-    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
-  };
-};
+// ==============================================
 
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   const session = await Session.findOne({
@@ -68,11 +66,14 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   if (isSessionTokenEpired)
     throw createHttpError(401, 'Authentication failed. Session token expired');
 
-  const newSession = createSession();
+  session.accessToken = randomBytes(30).toString('base64');
+  session.refreshToken = randomBytes(30).toString('base64');
+  session.accessTokenValidUntil = new Date(Date.now() + 60 * 1000);
+  session.refreshTokenValidUntil = new Date(Date.now() + THIRTY_DAY);
 
-  await Session.deleteOne({ _id: sessionId, refreshToken: refreshToken });
+  await session.save();
 
-  return await Session.create({ userId: session.userId, ...newSession });
+  return session;
 };
 
 export const logoutUser = async (cookies) => {
@@ -120,7 +121,7 @@ export const getAllUsers = async () => {
   const usersCount = await UsersCollection.find()
     .merge(usersQuery)
     .countDocuments();
-    
+
   return {
     usersAmount: usersCount,
   };

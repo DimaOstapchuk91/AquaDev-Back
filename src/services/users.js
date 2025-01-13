@@ -132,10 +132,10 @@ export const loginOrSignupWithGoogle = async (req, res, next) => {
     const ticket = await validateCode(code);
     const payload = ticket.getPayload();
 
-    if (!payload) {
+    if (!payload.email_verified) {
       return res.status(401).json({
         status: 401,
-        message: 'Invalid Google OAuth token!',
+        message: 'Email not verified by Google!',
       });
     }
 
@@ -170,6 +170,12 @@ export const loginOrSignupWithGoogle = async (req, res, next) => {
       message: 'Successfully authenticated via Google!',
       data: {
         accessToken: session.accessToken,
+        user: {
+          id: user._id,
+          email: user.email,
+          name: user.name,
+          avatar: user.avatar,
+        },
       },
     });
   } catch (err) {

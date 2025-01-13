@@ -7,7 +7,7 @@ security:
   - bearerAuth: []
 parameters:
   - name: userId
-    in: paths
+    in: path
     required: true
     schema:
       type: string
@@ -28,6 +28,6 @@ responses:
               type: string
               example: John Doe
   '404':
-    $ref: ../../components/responses/user/404.yaml
+    $ref: '../../../components/responses/user/404.yaml'
   '500':
-    $ref: ../../components/responses/user/500.yaml
+    $ref: '../../../components/responses/user/500.yaml'

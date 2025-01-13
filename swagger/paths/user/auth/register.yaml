@@ -38,8 +38,8 @@ responses:
           properties:
             userId:
               type: string
-              description: 'User's Id'
+              description: 'User`s Id'
   '409':
-    $ref: ../../components/responses/user/409.yaml
+    $ref: '../../../components/responses/user/409.yaml'
   '500':
-    $ref: ../../components/responses/user/500.yaml
+    $ref: '../../../components/responses/user/500.yaml'

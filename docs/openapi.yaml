@@ -12,9 +12,36 @@ tags:
 servers:
   - url: http://localhost:3000
 paths:
+  /user/auth/login:
+    post:
+      $ref: ../swagger/paths/user/auth/login.yaml
+  /user/auth/register:
+    post:
+      $ref: ../swagger/paths/user/auth/register.yaml
+  /user/auth/refresh:
+    post:
+      $ref: ../swagger/paths/user/auth/refresh.yaml
+  /user/auth/logout:
+    post:
+      $ref: ../swagger/paths/user/auth/logout.yaml
+  /user/auth/{userId}/updateUser:
+    post:
+      $ref: ../swagger/paths/user/auth/updateUser.yaml
+  /user/auth/{userId}/getUser:
+    post:
+      $ref: ../swagger/paths/user/auth/getUser.yaml
+  /user/auth/google/googleOAuthURL:
+    get:
+      $ref: ../swagger/paths/user/auth/google/googleOAuthURL.yaml
+  /user/auth/google/googleOAuthlogin:
+    post:
+      $ref: ../swagger/paths/user/auth/google/googleOAuthlogin.yaml
   /user:
     get:
       $ref: ../swagger/paths/user/get.yaml
+  /user/{userId}:
+    patch:
+      $ref: ../swagger/paths/user/patch.yaml
 
 components:
   securitySchemes:

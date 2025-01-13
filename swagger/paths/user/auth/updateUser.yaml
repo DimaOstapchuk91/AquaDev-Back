@@ -45,6 +45,6 @@ responses:
               type: string
               example: Jane Doe
   '404':
-    $ref: ../../components/responses/user/404.yaml
+    $ref: '../../../components/responses/user/404.yaml'
   '500':
-    $ref: ../../components/responses/user/500.yaml
+    $ref: '../../../components/responses/user/500.yaml'

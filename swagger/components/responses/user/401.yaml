@@ -7,13 +7,13 @@ content:
         - status
         - message
         - details
-    properties:
-      status:
-        type: integer
-        example: 401
-      message:
-        type: string
-        example: Authentication failed
-      details:
-        type: string
-        example: Invalid or expired token
+      properties:
+        status:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Authentication failed
+        details:
+          type: string
+          example: Invalid or expired token

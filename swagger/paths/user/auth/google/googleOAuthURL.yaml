@@ -1,12 +1,12 @@
 tags:
-  - Google OAuth
-summary: URL generation for Google OAuth
-operationId: generateGoogleOAuthUrl
-description: 'Generates a URL for Google OAuth authorization to obtain an authorization code'
+  - Authentication
+summary: Get Google OAuth URL
+operationId: getGoogleOAuthUrl
+description: 'Retrieve the Google OAuth URL to initiate the authentication flow.'
 security: []
 responses:
   '200':
-    description: 'Successfully obtainsd URL for Google OAuth'
+    description: 'Google OAuth URL retrieved successfully'
     content:
       application/json:
         schema:
@@ -23,8 +23,9 @@ responses:
               properties:
                 url:
                   type: string
-                  example: 'https://accounts.google.com/o/oauth2/auth?client_id=xxxxxx&redirect_uri=xxxxx&response_type=code&scope=email'
-    '400':
-      $ref: ../../components/responses/user/400.yaml
-    '500':
-      $ref: ../../components/responses/user/500.yaml
+                  format: uri
+                  example: https://accounts.google.com/o/oauth2/v2/auth?scope=email
+  '400':
+    $ref: '../../../../components/responses/user/400.yaml'
+  '500':
+    $ref: '../../../../components/responses/user/500.yaml'

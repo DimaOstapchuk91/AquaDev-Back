@@ -27,6 +27,6 @@ responses:
   '204':
     description: 'User logged out successfully'
   '401':
-    $ref: ../../components/responses/user/401.yaml
+    $ref: '../../../components/responses/user/401.yaml'
   '500':
-    $ref: ../../components/responses/user/500.yaml
+    $ref: '../../../components/responses/user/500.yaml'

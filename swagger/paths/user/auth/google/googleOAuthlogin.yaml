@@ -1,6 +1,6 @@
 tags:
-  - Google OAuth
-summary: Login via Google OAuth
+  - Authentication
+summary: Login or Sign Up with Google
 operationId: loginGoogleOAuthUrl
 description: 'Uses a Google OAuth authorization code to log in or register a user'
 security: []
@@ -9,7 +9,14 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: '#/components/schemas/user/loginWithGoogleOAuthSchema.yaml'
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            type: string
+            description: 'authorization code received from Google OAuth flow'
+            example: 4/0AX4XfWjDqT8PbZ6UYOa9R_mZf
 responses:
   '200':
     description: 'Successful login or registration via Google OAuth'
@@ -29,8 +36,29 @@ responses:
               properties:
                 accessToken:
                   type: string
-                  example: 'ya29.a0AfH6SMDk7BlLgU7eBXYu9pC7Hpa5tkQA0hM9d6mmHg5yPtNaXtW4K-dPV9e6-KYjF0e8a8kI'
-    '401':
-      $ref: ../../components/responses/user/401.yaml
-    '500':
-      $ref: ../../components/responses/user/500.yaml
+                  description: 'JWT access token for authentication'
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                user:
+                  type: object
+                  description: 'Details of the authenticated user'
+                  properties:
+                    id:
+                      type: string
+                      example: 64af16e9c6b9e71a6c123abc
+                    email:
+                      type: string
+                      format: email
+                      example: johndoe@example.com
+                    name:
+                      type: string
+                      example: Jonh Doe
+                    avatar:
+                      type: string
+                      format: uri
+                      example: https://example.com/avatar.jpg
+  '400':
+    $ref: '../../../../components/responses/user/400.yaml'
+  '401':
+    $ref: '../../../../components/responses/user/401.yaml'
+  '500':
+    $ref: '../../../../components/responses/user/500.yaml'

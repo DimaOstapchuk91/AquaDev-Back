@@ -7,22 +7,22 @@ security:
   - bearerAuth: []
 requestBody:
   required: true
-content:
-  application/json:
-    schema:
-      type: object
-      required:
-        - sessionId
-        - refreshToken
-      properties:
-        sessionId:
-          type: string
-          description: 'Session ID for refreshing'
-          example: session_id_123
-        refreshToken:
-          type: string
-          description: 'Refresh token'
-          example: /zw62g+lq/63JymjlqAfpacVr9ir9TCG5ZMsBA1S
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - sessionId
+          - refreshToken
+        properties:
+          sessionId:
+            type: string
+            description: 'Session ID for refreshing'
+            example: session_id_123
+          refreshToken:
+            type: string
+            description: 'Refresh token'
+            example: /zw62g+lq/63JymjlqAfpacVr9ir9TCG5ZMsBA1S
 responses:
   '200':
     description: 'Session refreshed successfully'
@@ -40,6 +40,6 @@ responses:
               description: 'New refresh token'
               example: tRRRgqmdISK5vAnu7nESyC4e61KZDGWkplTZ0IQM
   '401':
-    $ref: ../../components/responses/user/401.yaml
+    $ref: '../../../components/responses/user/401.yaml'
   '500':
-    $ref: ../../components/responses/user/500.yaml
+    $ref: '../../../components/responses/user/500.yaml'

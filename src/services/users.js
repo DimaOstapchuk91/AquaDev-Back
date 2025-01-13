@@ -25,8 +25,7 @@ const createSession = () => {
   return {
     accessToken,
     refreshToken,
-    // accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
-    accessTokenValidUntil: new Date(Date.now() + 60 * 1000),
+    accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
     refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
   };
 };
@@ -68,13 +67,15 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
 
   session.accessToken = randomBytes(30).toString('base64');
   session.refreshToken = randomBytes(30).toString('base64');
-  session.accessTokenValidUntil = new Date(Date.now() + 60 * 1000);
+  session.accessTokenValidUntil = new Date(Date.now() + TWO_HOURS);
   session.refreshTokenValidUntil = new Date(Date.now() + THIRTY_DAY);
 
   await session.save();
 
   return session;
 };
+
+// ==============================================
 
 export const logoutUser = async (cookies) => {
   const { sessionId, refreshToken } = cookies;
@@ -85,6 +86,8 @@ export const logoutUser = async (cookies) => {
   await Session.deleteOne({ _id: sessionId, refreshToken: refreshToken });
 };
 
+// ==============================================
+
 export const getUser = async (user) => {
   const userData = await UsersCollection.findOne({
     _id: user._id,
@@ -94,6 +97,8 @@ export const getUser = async (user) => {
 
   return userData;
 };
+
+// ==============================================
 
 export const updateUser = async (user, userData, options = {}) => {
   const rawResult = await UsersCollection.findOneAndUpdate(
@@ -114,6 +119,8 @@ export const updateUser = async (user, userData, options = {}) => {
     isNew: Boolean(rawResult?.lastErrorObject.upserted),
   };
 };
+
+// ==============================================
 
 export const getAllUsers = async () => {
   const usersQuery = UsersCollection.find();

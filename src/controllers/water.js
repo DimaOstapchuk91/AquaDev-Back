@@ -11,7 +11,6 @@ import {
 export async function getCurrentDayWaterController(req, res) {
   try {
     const userId = req.user._id;
-    console.log(req.user);
 
     const { waterPortions, totalWater } = await getWaterPortionsForDay(userId);
 

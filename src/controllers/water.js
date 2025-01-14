@@ -8,19 +8,21 @@ import {
   updateWaterPortion,
 } from '../services/water.js';
 
-export async function getCurrentDayWaterController(req, res) {
-  try {
-    const userId = req.user._id;
+export async function getByDayWaterController(req, res) {
+    try {
+        const userId = req.user._id;
 
-    const { waterPortions, totalWater } = await getWaterPortionsForDay(userId);
+        const { date } = req.query;
 
-    res.status(200).json({
-      totalWater,
-      waterPortions,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+        const { waterPortions, totalWater } = await getWaterPortionsForDay(userId, date);
+
+        res.status(200).json({
+            totalWater,
+            waterPortions,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 export async function getMonthWaterController(req, res) {

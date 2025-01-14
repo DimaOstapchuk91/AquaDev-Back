@@ -16,30 +16,7 @@ export const registerUser = async (payload) => {
   });
 };
 
-export const loginUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
-
-  if (!user)
-    throw createHttpError(404, 'Authentication failed. No such user exists');
-
-  const isPasswordMatch = await bcrypt.compare(payload.password, user.password);
-
-  if (!isPasswordMatch)
-    throw createHttpError(401, 'Authentication failed. Invalid password');
-
-  await Session.deleteOne({ userId: user._id });
-
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
-
-  return await Session.create({
-    userId: user._id,
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + TWO_HOURS),
-    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
-  });
-};
+// ==============================================
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -52,6 +29,26 @@ const createSession = () => {
     refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAY),
   };
 };
+
+// ==============================================
+
+export const loginUser = async (payload) => {
+  const user = await UsersCollection.findOne({ email: payload.email });
+
+  if (!user)
+    throw createHttpError(404, 'Authentication failed. No such user exists');
+
+  const isPasswordMatch = await bcrypt.compare(payload.password, user.password);
+
+  if (!isPasswordMatch)
+    throw createHttpError(401, 'Authentication failed. Invalid password');
+
+  const newSession = createSession();
+
+  return await Session.create({ userId: user._id, ...newSession });
+};
+
+// ==============================================
 
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   const session = await Session.findOne({
@@ -68,12 +65,17 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   if (isSessionTokenEpired)
     throw createHttpError(401, 'Authentication failed. Session token expired');
 
-  const newSession = createSession();
+  session.accessToken = randomBytes(30).toString('base64');
+  session.refreshToken = randomBytes(30).toString('base64');
+  session.accessTokenValidUntil = new Date(Date.now() + TWO_HOURS);
+  session.refreshTokenValidUntil = new Date(Date.now() + THIRTY_DAY);
 
-  await Session.deleteOne({ _id: sessionId, refreshToken: refreshToken });
+  await session.save();
 
-  return await Session.create({ userId: session.userId, ...newSession });
+  return session;
 };
+
+// ==============================================
 
 export const logoutUser = async (cookies) => {
   const { sessionId, refreshToken } = cookies;
@@ -84,6 +86,8 @@ export const logoutUser = async (cookies) => {
   await Session.deleteOne({ _id: sessionId, refreshToken: refreshToken });
 };
 
+// ==============================================
+
 export const getUser = async (user) => {
   const userData = await UsersCollection.findOne({
     _id: user._id,
@@ -93,6 +97,8 @@ export const getUser = async (user) => {
 
   return userData;
 };
+
+// ==============================================
 
 export const updateUser = async (user, userData, options = {}) => {
   const rawResult = await UsersCollection.findOneAndUpdate(
@@ -114,13 +120,15 @@ export const updateUser = async (user, userData, options = {}) => {
   };
 };
 
+// ==============================================
+
 export const getAllUsers = async () => {
   const usersQuery = UsersCollection.find();
 
   const usersCount = await UsersCollection.find()
     .merge(usersQuery)
     .countDocuments();
-    
+
   return {
     usersAmount: usersCount,
   };

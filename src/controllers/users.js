@@ -44,7 +44,7 @@ export const loginUserController = async (req, res) => {
   });
 };
 
-const setupSession = (res, session) => {
+export const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     secure: true,

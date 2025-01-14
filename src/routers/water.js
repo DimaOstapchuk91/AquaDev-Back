@@ -13,6 +13,7 @@ import {
   addWaterPortionSchema,
   updateWaterPortionSchema,
 } from '../validation/water.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const jsonParser = express.json();
 

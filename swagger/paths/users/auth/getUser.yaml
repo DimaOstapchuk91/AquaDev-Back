@@ -1,0 +1,33 @@
+tags:
+  - User
+summary: Get User info
+operationId: getUser
+description: 'Retrieve the details of a specific user by their user ID.'
+security:
+  - bearerAuth: []
+parameters:
+  - name: userId
+    in: path
+    required: true
+    schema:
+      type: string
+      description: 'User ID of the user to retrieve'
+      example: user_id_123
+responses:
+  '200':
+    description: 'User found'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              example: johndoe@example.com
+            name:
+              type: string
+              example: John Doe
+  '404':
+    $ref: '../../../components/responses/user/404.yaml'
+  '500':
+    $ref: '../../../components/responses/user/500.yaml'

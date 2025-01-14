@@ -1,0 +1,67 @@
+tags:
+  - Users
+summary: Update user profile
+operationId: update
+description: "Updates the user's profile information, including avatar if provided."
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          avatar:
+            type: string
+            format: binary
+            description: The user's avatar image
+          name:
+            type: string
+            description: The user's name
+          email:
+            type: string
+            format: email
+            description: The user's email address
+
+responses:
+  '200':
+    description: Successfully updated user profile
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully patched a contact!
+            data:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: User's unique ID
+                  example: 5f4e7b5f1b0a5c3d0bfc6a58
+                name:
+                  type: string
+                  description: User's name
+                  example: John Doe
+                email:
+                  type: string
+                  description: User's email
+                  example: john.doe@example.com
+                avatar:
+                  type: string
+                  description: URL of the user's avatar image (if updated)
+                  example: 'https://res.cloudinary.com/demo/image/upload/v1585012836/avatars/johndoe.jpg'
+  '400':
+    $ref: '../../../components/responses/users/400.yaml'
+  '401':
+    $ref: '../../../components/responses/users/401.yaml'
+  '404':
+    $ref: '../../../components/responses/users/404.yaml'
+  '500':
+    $ref: '../../../components/responses/users/500.yaml'

@@ -2,10 +2,16 @@ import { Router } from 'express';
 import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { authSchema, updateUserSchema } from '../validation/users.js';
+import {
+  authSchema,
+  loginWithGoogleOAuthSchema,
+  updateUserSchema,
+} from '../validation/users.js';
 import {
   gerUserController,
+  getGoogleOAuthUrlController,
   loginUserController,
+  loginWithGoogleController,
   logoutUserController,
   refreshUserSessionController,
   registerUserController,
@@ -43,5 +49,17 @@ router.patch(
   ctrlWrapper(updateUserController),
 );
 
+
+router.get('/auth/google/url', ctrlWrapper(getGoogleOAuthUrlController));
+
+router.post(
+  '/auth/google/callback',
+  jsonParser,
+  validateBody(loginWithGoogleOAuthSchema),
+  ctrlWrapper(loginWithGoogleController),
+);
+
+
 router.get('/count', ctrlWrapper(getAllUsersController));
+
 export default router;

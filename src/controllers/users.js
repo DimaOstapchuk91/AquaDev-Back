@@ -1,12 +1,14 @@
 import { THIRTY_DAY } from '../constans/constans.js';
 import {
   getUser,
+  loginOrSignupWithGoogle,
   loginUser,
   logoutUser,
   refreshUserSession,
   registerUser,
   updateUser,
 } from '../services/users.js';
+import { generateAutUrl } from '../utils/googleOAuth2.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary .js';
 import { getAllUsers } from '../services/users.js';
 
@@ -119,6 +121,47 @@ export const updateUserController = async (req, res) => {
   });
 };
 
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAutUrl();
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: { url },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  try {
+    if (!req.body.code) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Authorization code is required.',
+      });
+    }
+
+    const session = await loginOrSignupWithGoogle(req.body.code);
+
+    setupSession(res, session);
+
+    res.json({
+      status: 200,
+      message: 'Successfully logged in via Google OAuth!',
+      data: {
+        accessToken: session.accessToken,
+      },
+    });
+  } catch (err) {
+    console.log('Error during Google login:', err);
+
+    res.status(500).json({
+      status: 500,
+      message: 'Failed to login via Google OAuth.',
+      error: err.message,
+    });
+  }
+};
+
 export const getAllUsersController = async (req, res) => {
   const usersCount = await getAllUsers();
 
@@ -128,3 +171,4 @@ export const getAllUsersController = async (req, res) => {
     usersAmount: usersCount,
   });
 };
+

@@ -7,22 +7,38 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: http://127.0.0.1:3000         #127.0.0.1:3000
+  - url: http://localhost:3000
+  - url: https://aquadev-back.onrender.com/
 tags:
   - name: Water
     description: Operations related to water tracking.
-components:
-  securitySchemes:
-    cookieAuth:
-      type: apiKey
-      in: cookie
-      name: refreshToken
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-  
 paths:
+  /users/login:
+    post:
+      $ref: ../swagger/paths/users/auth/login.yaml
+  /users/register:
+    post:
+      $ref: ../swagger/paths/users/auth/register.yaml
+  /users/refresh:
+    post:
+      $ref: ../swagger/paths/users/auth/refresh.yaml
+  /users/logout:
+    post:
+      $ref: ../swagger/paths/users/auth/logout.yaml
+  /users/update:
+    patch:
+      $ref: ../swagger/paths/users/auth/update.yaml
+  /users/google/url:
+    get:
+      $ref: ../swagger/paths/users/auth/google/googleURL.yaml
+  /users/google/callback:
+    post:
+      $ref: ../swagger/paths/users/auth/google/googleCallback.yaml
+  /users:
+    get:
+      $ref: ../swagger/paths/users/get.yaml
+    patch:
+      $ref: ../swagger/paths/users/patch.yaml
   /water/{id}:
     delete:
       $ref: ../swagger/paths/water/{id}/delete.yaml
@@ -35,3 +51,13 @@ paths:
       $ref: ../swagger/paths/water/post.yaml
     get: 
       $ref: ../swagger/paths/water/get.yaml
+ components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: refreshToken
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

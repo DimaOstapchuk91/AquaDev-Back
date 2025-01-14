@@ -1,0 +1,31 @@
+tags:
+  - Authentication
+summary: Get Google OAuth URL
+operationId: getGoogleOAuthUrl
+description: 'Retrieve the Google OAuth URL to initiate the authentication flow.'
+security: []
+responses:
+  '200':
+    description: 'Google OAuth URL retrieved successfully'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully get Google OAuth url!
+            data:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  example: https://accounts.google.com/o/oauth2/v2/auth?scope=email
+  '400':
+    $ref: '../../../../components/responses/users/400.yaml'
+  '500':
+    $ref: '../../../../components/responses/users/500.yaml'

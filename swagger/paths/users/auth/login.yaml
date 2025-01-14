@@ -1,0 +1,49 @@
+tags:
+  - Authentication
+summary: Login user
+operationId: loginUser
+description: 'Login a user by providing their email and password. Returns access and refresh token'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            description: 'Use is email for authentication'
+            example: joindoe@example.com
+          password:
+            type: string
+            format: password
+            description: 'User is password'
+            example: 'password123'
+responses:
+  '200':
+    description: 'User logged in successfully'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              description: 'Access token'
+              example: wRyjvWY68U9+3zqCqUGK
+            refreshToken:
+              type: string
+              description: 'Refresh token'
+              example: LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/
+  '401':
+    $ref: ../../../components/responses/users/401.yaml
+  '404':
+    $ref: ../../../components/responses/users/404.yaml
+  '500':
+    $ref: ../../../components/responses/users/500.yaml

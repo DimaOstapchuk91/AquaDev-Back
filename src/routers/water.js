@@ -13,15 +13,14 @@ import {
   addWaterPortionSchema,
   updateWaterPortionSchema,
 } from '../validation/water.js';
-import { authenticate } from '../middlewares/authenticate.js';
 
 const jsonParser = express.json();
 
 const router = Router();
 
-router.get('/:date', authenticate, ctrlWrapper(getCurrentDayWaterController));
+router.get('/:date', ctrlWrapper(getCurrentDayWaterController));
 
-router.get('/:year-:month', authenticate, ctrlWrapper(getMonthWaterController));
+router.get('/month/:year-:month', ctrlWrapper(getMonthWaterController));
 
 router.post(
   '/',

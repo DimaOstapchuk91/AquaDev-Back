@@ -1,11 +1,13 @@
 import createHttpError from "http-errors";
 import { addWaterPortion, deleteWaterPortion, getWaterPortionById, getWaterPortionsForDay, getWaterPortionsForMonth, updateWaterPortion } from "../services/water.js";
 
-export async function getCurrentDayWaterController(req, res) {
+export async function getByDayWaterController(req, res) {
     try {
         const userId = req.user._id;
 
-        const { waterPortions, totalWater } = await getWaterPortionsForDay(userId);
+        const { date } = req.query;
+
+        const { waterPortions, totalWater } = await getWaterPortionsForDay(userId, date);
 
         res.status(200).json({
             totalWater,

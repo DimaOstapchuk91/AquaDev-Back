@@ -581,9 +581,7 @@
             "$ref": "#/components/responses/500"
           }
         }
-      }
-    },
-    "/users/{userId}": {
+      },
       "patch": {
         "tags": [
           "Users"
@@ -596,42 +594,28 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The ID of the user to update",
-              "example": "user_id_123"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "email",
-                  "name"
-                ],
                 "properties": {
                   "email": {
                     "type": "string",
                     "format": "email",
+                    "description": "Updated email address of the user",
                     "example": "updateduser@example.com"
                   },
                   "name": {
                     "type": "string",
+                    "description": "Updated name of the user",
                     "example": "Updated Name"
                   },
                   "avatar": {
                     "type": "string",
                     "format": "binary",
-                    "description": "Avatar file to upload"
+                    "description": "New avatar image to upload (optional)"
                   }
                 }
               }

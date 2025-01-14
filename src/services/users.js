@@ -126,7 +126,6 @@ export const updateUser = async (user, userData, options = {}) => {
   };
 };
 
-
 export const loginOrSignupWithGoogle = async (req, res, next) => {
   try {
     const { code } = req.body;
@@ -200,7 +199,7 @@ export const loginOrSignupWithGoogle = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-
+};
 // ==============================================
 
 export const getAllUsers = async () => {
@@ -213,5 +212,4 @@ export const getAllUsers = async () => {
   return {
     usersAmount: usersCount,
   };
-
 };

@@ -43,15 +43,15 @@ paths:
     delete:
       $ref: ../swagger/paths/water/{id}/delete.yaml
     patch:
-      $ref: ../swagger/paths/water/{id}/patch.yaml 
+      $ref: ../swagger/paths/water/{id}/patch.yaml
     get:
       $ref: ../swagger/paths/water/{id}/get.yaml
   /water:
     post:
       $ref: ../swagger/paths/water/post.yaml
-    get: 
+    get:
       $ref: ../swagger/paths/water/get.yaml
- components:
+components:
   securitySchemes:
     cookieAuth:
       type: apiKey

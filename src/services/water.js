@@ -1,72 +1,71 @@
-import { WaterPortion } from "../db/models/water.js";
-import { getEndOfDay, getStartOfDay } from "../utils/getDayBounds.js";
-import { endOfMonth, startOfMonth } from "../utils/getMonthBounds.js";
+import { WaterPortion } from '../db/models/water.js';
+import { getEndOfDay, getStartOfDay } from '../utils/getDayBounds.js';
+import { endOfMonth, startOfMonth } from '../utils/getMonthBounds.js';
 
+export const getWaterPortionsForDay = async (userId, req) => {
+  const getDate = req.params; //{ date: '2025-01-14' }
+  const startOfDay = getStartOfDay(getDate.date);
+  const endOfDay = getEndOfDay(getDate.date);
 
-export async function getWaterPortionsForDay(userId, date=null) {
-    const dateToUse = date ? new Date(date) : new Date();
+  const waterPortions = await WaterPortion.find({
+    userId: userId,
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  });
 
-    const startOfDay = getStartOfDay(dateToUse);
-    const endOfDay = getEndOfDay(dateToUse);
+  const totalWater = waterPortions.reduce(
+    (sum, portion) => sum + portion.amount,
+    0,
+  );
 
-    const waterPortions = await WaterPortion.find({
-        userId,
-        createdAt: { $gte: startOfDay, $lt: endOfDay },
-    }).select('amount time createdAt');
+  return {
+    dateDay: getDate.date,
+    waterPortions,
+    totalWater,
+  };
+};
 
-    const totalWater = waterPortions.reduce((sum, portion) => sum + portion.amount, 0);
-
-    return {
-        waterPortions,
-        totalWater
-    };
-}
-
-export async function getWaterPortionsByDate(userId, date) {
-
-}
+export async function getWaterPortionsByDate(userId, date) {}
 
 export function getWaterPortionById(itemId) {
-    return WaterPortion.findOne({ _id: itemId });
+  return WaterPortion.findOne({ _id: itemId });
 }
 
 export function addWaterPortion(waterPortion) {
-    return WaterPortion.create(waterPortion);
+  return WaterPortion.create(waterPortion);
 }
 
 export function updateWaterPortion(itemId, waterPortion) {
-    return WaterPortion.findOneAndUpdate({ _id: itemId }, waterPortion, {
-        new: true
-    });
+  return WaterPortion.findOneAndUpdate({ _id: itemId }, waterPortion, {
+    new: true,
+  });
 }
 
 export function deleteWaterPortion(itemId) {
-    return WaterPortion.findOneAndDelete({ _id: itemId });
+  return WaterPortion.findOneAndDelete({ _id: itemId });
 }
 
 export async function getWaterPortionsForMonth(year, month, userId) {
-    const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
-    const endOfSelectedMonth = endOfMonth(new Date(year, month, 1));
+  const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
+  const endOfSelectedMonth = endOfMonth(new Date(year, month, 1));
 
-    const waterPortions = await WaterPortion.find({
-        createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
-    }).select('amount createdAt');
+  const waterPortions = await WaterPortion.find({
+    createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
+  }).select('amount createdAt');
 
-    const totalWaterByDay = {};
+  const totalWaterByDay = {};
 
-    waterPortions.forEach(portion => {
-        const day = portion.createdAt.toISOString().slice(0, 10);
-        if (!totalWaterByDay[day]) {
-            totalWaterByDay[day] = [];
-        }
-console.log(typeof portion.amount);
+  waterPortions.forEach((portion) => {
+    const day = portion.createdAt.toISOString().slice(0, 10);
+    if (!totalWaterByDay[day]) {
+      totalWaterByDay[day] = [];
+    }
+    console.log(typeof portion.amount);
 
-totalWaterByDay[day] = Number(totalWaterByDay[day]) + portion.amount;
-    });
+    totalWaterByDay[day] = Number(totalWaterByDay[day]) + portion.amount;
+  });
 
-    return totalWaterByDay;
+  return totalWaterByDay;
 }
-
 
 // export async function getWaterPortionsForMonth(year, month, userId) {
 //     const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
@@ -75,7 +74,6 @@ totalWaterByDay[day] = Number(totalWaterByDay[day]) + portion.amount;
 //     const waterPortions = await WaterPortion.find({
 //         createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
 //     }).select('_id amount time createdAt');
-
 
 //     const waterPortionsByDay = {};
 

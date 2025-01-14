@@ -19,7 +19,7 @@ const jsonParser = express.json();
 
 const router = Router();
 
-router.get('/', authenticate, ctrlWrapper(getCurrentDayWaterController));
+router.get('/:date', authenticate, ctrlWrapper(getCurrentDayWaterController));
 
 router.get('/:year-:month', authenticate, ctrlWrapper(getMonthWaterController));
 

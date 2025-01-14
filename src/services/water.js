@@ -2,9 +2,10 @@ import { WaterPortion } from '../db/models/water.js';
 import { getEndOfDay, getStartOfDay } from '../utils/getDayBounds.js';
 import { endOfMonth, startOfMonth } from '../utils/getMonthBounds.js';
 
-export const getWaterPortionsForDay = async (userId) => {
-  const startOfDay = getStartOfDay();
-  const endOfDay = getEndOfDay();
+export const getWaterPortionsForDay = async (userId, req) => {
+  const getDate = req.params; //{ date: '2025-01-14' }
+  const startOfDay = getStartOfDay(getDate.date);
+  const endOfDay = getEndOfDay(getDate.date);
 
   const waterPortions = await WaterPortion.find({
     userId: userId,
@@ -17,6 +18,7 @@ export const getWaterPortionsForDay = async (userId) => {
   );
 
   return {
+    dateDay: getDate.date,
     waterPortions,
     totalWater,
   };

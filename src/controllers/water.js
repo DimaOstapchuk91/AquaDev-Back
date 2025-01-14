@@ -9,18 +9,18 @@ import {
 } from '../services/water.js';
 
 export async function getCurrentDayWaterController(req, res) {
-  try {
-    const userId = req.user._id;
+  const userId = req.user._id;
 
-    const { waterPortions, totalWater } = await getWaterPortionsForDay(userId);
+  const { dateDay, waterPortions, totalWater } = await getWaterPortionsForDay(
+    userId,
+    req,
+  );
 
-    res.status(200).json({
-      totalWater,
-      waterPortions,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  res.status(200).json({
+    dateDay,
+    totalWater,
+    waterPortions,
+  });
 }
 
 export async function getMonthWaterController(req, res) {

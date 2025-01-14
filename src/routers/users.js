@@ -19,6 +19,7 @@ import {
 } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/upload.js';
+import { getAllUsersController } from '../controllers/users.js';
 
 const jsonParser = express.json();
 
@@ -48,6 +49,7 @@ router.patch(
   ctrlWrapper(updateUserController),
 );
 
+
 router.get('/auth/google/url', ctrlWrapper(getGoogleOAuthUrlController));
 
 router.post(
@@ -56,5 +58,8 @@ router.post(
   validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
 );
+
+
+router.get('/count', ctrlWrapper(getAllUsersController));
 
 export default router;

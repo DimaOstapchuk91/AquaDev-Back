@@ -1,16 +1,17 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Contacts app
+  title: 'AquaTrack'
+  description: This is the documentation for AquaTrack app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: This is a documentation of contacts app
-tags:
-  - name: Auth
-    description: Auth operations.
 servers:
   - url: http://localhost:3000
+  - url: https://aquadev-back.onrender.com/
+tags:
+  - name: Water
+    description: Operations related to water tracking.
 paths:
   /users/login:
     post:
@@ -38,8 +39,19 @@ paths:
       $ref: ../swagger/paths/users/get.yaml
     patch:
       $ref: ../swagger/paths/users/patch.yaml
-
-components:
+  /water/{id}:
+    delete:
+      $ref: ../swagger/paths/water/{id}/delete.yaml
+    patch:
+      $ref: ../swagger/paths/water/{id}/patch.yaml 
+    get:
+      $ref: ../swagger/paths/water/{id}/get.yaml
+  /water:
+    post:
+      $ref: ../swagger/paths/water/post.yaml
+    get: 
+      $ref: ../swagger/paths/water/get.yaml
+ components:
   securitySchemes:
     cookieAuth:
       type: apiKey

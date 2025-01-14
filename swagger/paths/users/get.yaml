@@ -23,8 +23,8 @@ responses:
               type: string
               example: 'https://example.com/avatar.jpg'
   '401':
-    $ref: '../../components/responses/user/401.yaml'
+    $ref: '../../components/responses/users/401.yaml'
   '404':
-    $ref: '../../components/responses/user/404.yaml'
+    $ref: '../../components/responses/users/404.yaml'
   '500':
-    $ref: '../../components/responses/user/500.yaml'
+    $ref: '../../components/responses/users/500.yaml'

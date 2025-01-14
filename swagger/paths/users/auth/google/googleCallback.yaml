@@ -57,8 +57,8 @@ responses:
                       format: uri
                       example: https://example.com/avatar.jpg
   '400':
-    $ref: '../../../../components/responses/user/400.yaml'
+    $ref: '../../../../components/responses/users/400.yaml'
   '401':
-    $ref: '../../../../components/responses/user/401.yaml'
+    $ref: '../../../../components/responses/users/401.yaml'
   '500':
-    $ref: '../../../../components/responses/user/500.yaml'
+    $ref: '../../../../components/responses/users/500.yaml'

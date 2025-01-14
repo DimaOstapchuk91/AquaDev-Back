@@ -42,8 +42,8 @@ responses:
               description: 'Refresh token'
               example: LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/
   '401':
-    $ref: '../../../components/responses/user/401.yaml'
+    $ref: ../../../components/responses/users/401.yaml
   '404':
-    $ref: '../../../components/responses/user/404.yaml'
+    $ref: ../../../components/responses/users/404.yaml
   '500':
-    $ref: '../../../components/responses/user/500.yaml'
+    $ref: ../../../components/responses/users/500.yaml

@@ -40,6 +40,6 @@ responses:
               description: 'New refresh token'
               example: tRRRgqmdISK5vAnu7nESyC4e61KZDGWkplTZ0IQM
   '401':
-    $ref: '../../../components/responses/user/401.yaml'
+    $ref: '../../../components/responses/users/401.yaml'
   '500':
-    $ref: '../../../components/responses/user/500.yaml'
+    $ref: '../../../components/responses/users/500.yaml'

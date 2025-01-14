@@ -49,14 +49,14 @@ const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 };

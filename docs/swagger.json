@@ -21,7 +21,7 @@
     }
   ],
   "paths": {
-    "/user/auth/login": {
+    "/users/login": {
       "post": {
         "tags": [
           "Authentication"
@@ -97,7 +97,7 @@
         }
       }
     },
-    "/user/auth/register": {
+    "/users/register": {
       "post": {
         "tags": [
           "Authentication"
@@ -165,7 +165,7 @@
         }
       }
     },
-    "/user/auth/refresh": {
+    "/users/refresh": {
       "post": {
         "tags": [
           "Authentication"
@@ -236,7 +236,7 @@
         }
       }
     },
-    "/user/auth/logout": {
+    "/users/logout": {
       "post": {
         "tags": [
           "Authentication"
@@ -288,50 +288,39 @@
         }
       }
     },
-    "/user/auth/{userId}/updateUser": {
-      "post": {
+    "/users/update": {
+      "patch": {
         "tags": [
-          "User"
+          "Users"
         ],
-        "summary": "Update User info",
-        "operationId": "updateUser",
-        "description": "Update user details such as email and name.",
+        "summary": "Update user profile",
+        "operationId": "update",
+        "description": "Updates the user's profile information, including avatar if provided.",
         "security": [
           {
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "Used ID the user to update",
-              "example": "user_id_123"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "email",
-                  "name"
-                ],
                 "properties": {
-                  "email": {
+                  "avatar": {
                     "type": "string",
-                    "format": "email",
-                    "example": "newemail@example.com"
+                    "format": "binary",
+                    "description": "The user's avatar image"
                   },
                   "name": {
                     "type": "string",
-                    "example": "Jane Doe"
+                    "description": "The user's name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The user's email address"
                   }
                 }
               }
@@ -340,24 +329,55 @@
         },
         "responses": {
           "200": {
-            "description": "User update successfully",
+            "description": "Successfully updated user profile",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "email": {
-                      "type": "string",
-                      "example": "newemail@example.com"
+                    "status": {
+                      "type": "integer",
+                      "example": 200
                     },
-                    "name": {
+                    "message": {
                       "type": "string",
-                      "example": "Jane Doe"
+                      "example": "Successfully patched a contact!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "User's unique ID",
+                          "example": "5f4e7b5f1b0a5c3d0bfc6a58"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "User's name",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "User's email",
+                          "example": "john.doe@example.com"
+                        },
+                        "avatar": {
+                          "type": "string",
+                          "description": "URL of the user's avatar image (if updated)",
+                          "example": "https://res.cloudinary.com/demo/image/upload/v1585012836/avatars/johndoe.jpg"
+                        }
+                      }
                     }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -368,62 +388,7 @@
         }
       }
     },
-    "/user/auth/{userId}/getUser": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Get User info",
-        "operationId": "getUser",
-        "description": "Retrieve the details of a specific user by their user ID.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "User ID of the user to retrieve",
-              "example": "user_id_123"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "type": "string",
-                      "example": "johndoe@example.com"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "John Doe"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/user/auth/google/googleOAuthURL": {
+    "/users/google/url": {
       "get": {
         "tags": [
           "Authentication"
@@ -472,7 +437,7 @@
         }
       }
     },
-    "/user/auth/google/googleOAuthlogin": {
+    "/users/google/callback": {
       "post": {
         "tags": [
           "Authentication"
@@ -568,7 +533,7 @@
         }
       }
     },
-    "/user": {
+    "/users": {
       "get": {
         "tags": [
           "User"
@@ -618,10 +583,10 @@
         }
       }
     },
-    "/user/{userId}": {
+    "/users/{userId}": {
       "patch": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Update User Data",
         "operationId": "updateUsers",
@@ -633,8 +598,8 @@
         ],
         "parameters": [
           {
-            "name": "userId",
             "in": "path",
+            "name": "userId",
             "required": true,
             "schema": {
               "type": "string",

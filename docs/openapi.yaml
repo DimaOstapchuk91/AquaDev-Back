@@ -12,36 +12,33 @@ tags:
 servers:
   - url: http://localhost:3000
 paths:
-  /user/auth/login:
+  /users/login:
     post:
-      $ref: ../swagger/paths/user/auth/login.yaml
-  /user/auth/register:
+      $ref: ../swagger/paths/users/auth/login.yaml
+  /users/register:
     post:
-      $ref: ../swagger/paths/user/auth/register.yaml
-  /user/auth/refresh:
+      $ref: ../swagger/paths/users/auth/register.yaml
+  /users/refresh:
     post:
-      $ref: ../swagger/paths/user/auth/refresh.yaml
-  /user/auth/logout:
+      $ref: ../swagger/paths/users/auth/refresh.yaml
+  /users/logout:
     post:
-      $ref: ../swagger/paths/user/auth/logout.yaml
-  /user/auth/{userId}/updateUser:
-    post:
-      $ref: ../swagger/paths/user/auth/updateUser.yaml
-  /user/auth/{userId}/getUser:
-    post:
-      $ref: ../swagger/paths/user/auth/getUser.yaml
-  /user/auth/google/googleOAuthURL:
-    get:
-      $ref: ../swagger/paths/user/auth/google/googleOAuthURL.yaml
-  /user/auth/google/googleOAuthlogin:
-    post:
-      $ref: ../swagger/paths/user/auth/google/googleOAuthlogin.yaml
-  /user:
-    get:
-      $ref: ../swagger/paths/user/get.yaml
-  /user/{userId}:
+      $ref: ../swagger/paths/users/auth/logout.yaml
+  /users/update:
     patch:
-      $ref: ../swagger/paths/user/patch.yaml
+      $ref: ../swagger/paths/users/auth/update.yaml
+  /users/google/url:
+    get:
+      $ref: ../swagger/paths/users/auth/google/googleURL.yaml
+  /users/google/callback:
+    post:
+      $ref: ../swagger/paths/users/auth/google/googleCallback.yaml
+  /users:
+    get:
+      $ref: ../swagger/paths/users/get.yaml
+  /users/{userId}:
+    patch:
+      $ref: ../swagger/paths/users/patch.yaml
 
 components:
   securitySchemes:

@@ -1,13 +1,13 @@
 tags:
-  - User
+  - Users
 summary: Update User Data
 operationId: updateUsers
 description: "Update authenticated user's details, such as email, name, or avatar."
 security:
   - bearerAuth: []
 parameters:
-  - name: userId
-    in: path
+  - in: path
+    name: userId
     required: true
     schema:
       type: string
@@ -52,8 +52,8 @@ responses:
               type: string
               example: 'https://example.com/updated-avatar.jpg'
   '400':
-    $ref: '../../components/responses/user/400.yaml'
+    $ref: '../../components/responses/users/400.yaml'
   '401':
-    $ref: '../../components/responses/user/401.yaml'
+    $ref: '../../components/responses/users/401.yaml'
   '404':
-    $ref: '../../components/responses/user/404.yaml'
+    $ref: '../../components/responses/users/404.yaml'

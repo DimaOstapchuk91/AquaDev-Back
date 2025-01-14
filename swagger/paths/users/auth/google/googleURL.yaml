@@ -26,6 +26,6 @@ responses:
                   format: uri
                   example: https://accounts.google.com/o/oauth2/v2/auth?scope=email
   '400':
-    $ref: '../../../../components/responses/user/400.yaml'
+    $ref: '../../../../components/responses/users/400.yaml'
   '500':
-    $ref: '../../../../components/responses/user/500.yaml'
+    $ref: '../../../../components/responses/users/500.yaml'

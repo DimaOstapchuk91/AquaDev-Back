@@ -3,28 +3,47 @@ import { getEndOfDay, getStartOfDay } from "../utils/getDayBounds.js";
 import { endOfMonth, startOfMonth } from "../utils/getMonthBounds.js";
 
 
-export async function getWaterPortionsForDay(userId, date=null) {
-    const dateToUse = date ? new Date(date) : new Date();
+// export async function getWaterPortionsForDay(userId, date=null) {
+//     const dateToUse = date ? new Date(date) : new Date();
 
-    const startOfDay = getStartOfDay(dateToUse);
-    const endOfDay = getEndOfDay(dateToUse);
+//     const startOfDay = getStartOfDay(dateToUse);
+//     const endOfDay = getEndOfDay(dateToUse);
 
-    const waterPortions = await WaterPortion.find({
-        userId,
-        createdAt: { $gte: startOfDay, $lt: endOfDay },
-    }).select('amount time createdAt');
+//     const waterPortions = await WaterPortion.find({
+//         userId,
+//         createdAt: { $gte: startOfDay, $lt: endOfDay },
+//     }).select('amount time createdAt');
 
-    const totalWater = waterPortions.reduce((sum, portion) => sum + portion.amount, 0);
+//     const totalWater = waterPortions.reduce((sum, portion) => sum + portion.amount, 0);
 
-    return {
-        waterPortions,
-        totalWater
-    };
-}
+//     return {
+//         waterPortions,
+//         totalWater
+//     };
+// }
 
-export async function getWaterPortionsByDate(userId, date) {
+export const getWaterPortionsForDay = async (userId, req) => {
+  const getDate = req.params; //{ date: '2025-01-14' }
+  const startOfDay = getStartOfDay(getDate.date);
+  const endOfDay = getEndOfDay(getDate.date);
 
-}
+  const waterPortions = await WaterPortion.find({
+    userId: userId,
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  });
+
+  const totalWater = waterPortions.reduce(
+    (sum, portion) => sum + portion.amount,
+    0,
+  );
+
+  return {
+    dateDay: getDate.date,
+    waterPortions,
+    totalWater,
+  };
+};
+
 
 export function getWaterPortionById(itemId) {
     return WaterPortion.findOne({ _id: itemId });

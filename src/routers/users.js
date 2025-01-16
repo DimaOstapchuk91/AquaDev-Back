@@ -43,12 +43,10 @@ router.get('/data', authenticate, ctrlWrapper(gerUserController));
 router.patch(
   '/update',
   authenticate,
-  jsonParser,
   upload.single('avatar'),
   validateBody(updateUserSchema),
   ctrlWrapper(updateUserController),
 );
-
 
 router.get('/auth/google/url', ctrlWrapper(getGoogleOAuthUrlController));
 
@@ -58,7 +56,6 @@ router.post(
   validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
 );
-
 
 router.get('/count', ctrlWrapper(getAllUsersController));
 

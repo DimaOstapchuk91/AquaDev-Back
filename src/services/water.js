@@ -74,7 +74,7 @@ export async function deleteWaterPortion(itemId) {
         throw createHttpError(404, 'Entry not found!');
     }
 
-    return result;
+    return {_id: result._id};
 }
 
 export async function getWaterPortionsForMonth(year, month, userId) {

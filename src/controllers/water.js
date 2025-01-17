@@ -67,7 +67,6 @@ export async function updateWaterPortionController(req, res) {
   const waterPortion = {
     amount: req.body.amount,
     time: req.body.time,
-    userId: req.user._id
   };
 
   const result = await updateWaterPortion(id, waterPortion, req.user._id);

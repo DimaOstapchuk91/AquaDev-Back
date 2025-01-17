@@ -1,8 +1,6 @@
-import createHttpError from 'http-errors';
 import {
   addWaterPortion,
   deleteWaterPortion,
-  getWaterPortionById,
   getWaterPortionsForDay,
   getWaterPortionsForMonth,
   updateWaterPortion,
@@ -65,21 +63,13 @@ export async function addWaterPortionController(req, res) {
 
 export async function updateWaterPortionController(req, res) {
   const { id } = req.params;
-  const existItem = await getWaterPortionById(id);
-  if (!existItem) {
-    throw new createHttpError(404, 'Entry not found!');
-  }
+
   const waterPortion = {
     amount: req.body.amount,
     time: req.body.time,
-    // userId: req.user.id
   };
 
-  const result = await updateWaterPortion(id, waterPortion);
-
-  if (result === null) {
-    throw new createHttpError(404, 'Entry not found!');
-  }
+  const result = await updateWaterPortion(id, waterPortion, req.user._id);
 
   res.status(200).json({
     status: 200,
@@ -93,9 +83,5 @@ export async function deleteWaterPortionController(req, res) {
 
   const result = await deleteWaterPortion(id);
 
-  if (result === null) {
-    throw new createHttpError(404, 'Entry not found!');
-  }
-
-  res.sendStatus(204);
+  res.status(200).json({ status: 200, message: 'Entry successfully deleted!', data: result });
 }

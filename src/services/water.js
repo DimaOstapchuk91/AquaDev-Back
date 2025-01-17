@@ -24,33 +24,59 @@ import { endOfMonth, startOfMonth } from "../utils/getMonthBounds.js";
 // }
 
 export const getWaterPortionsForDay = async (userId, req) => {
-  const getDate = req.params; //{ date: '2025-01-14' }
-  const startOfDay = getStartOfDay(getDate.date);
-  const endOfDay = getEndOfDay(getDate.date);
+    try {
+        const getDate = req.params; //{ date: '2025-01-14' }
 
-  const waterPortions = await WaterPortion.find({
-    userId: userId,
-    createdAt: { $gte: startOfDay, $lt: endOfDay },
-  });
+        const parsedDate = new Date(getDate.date);
+        if (parsedDate.toString() === 'Invalid Date') {
+            throw createHttpError(400, 'Invalid date format');
+        }
 
-  const totalWater = waterPortions.reduce(
-    (sum, portion) => sum + portion.amount,
-    0,
-  );
+        const startOfDay = getStartOfDay(getDate.date);
+        const endOfDay = getEndOfDay(getDate.date);
 
-  return {
-    dateDay: getDate.date,
-    waterPortions,
-    totalWater,
-  };
+        const waterPortions = await WaterPortion.find({
+            userId: userId,
+            createdAt: { $gte: startOfDay, $lt: endOfDay },
+        });
+
+        if (waterPortions.length === 0) {
+            throw createHttpError(404, 'No water entries found for this day');
+        }
+
+        const totalWater = waterPortions.reduce(
+            (sum, portion) => sum + portion.amount,
+            0,
+        );
+        return {
+            dateDay: getDate.date,
+            waterPortions,
+            totalWater,
+        };
+    } catch (error) {
+        if (error.status) {
+            throw error;
+        }
+        throw createHttpError(500, `Error occurred while fetching data: ${error.message}`);
+    }
 };
 
 export async function addWaterPortion(waterPortion) {
-    return await WaterPortion.create(waterPortion);
+    try {
+        const result = await WaterPortion.create(waterPortion);
+
+        return result;
+    } catch (error) {
+        if (error.status) {
+            throw error;
+        }
+        throw createHttpError(500, `Error occurred while creating en entry:${error.message}`);
+    }
 }
 
 export async function updateWaterPortion(itemId, waterPortion, userId, options = {}) {
-    const result = await WaterPortion.findOneAndUpdate(
+    try {
+        const result = await WaterPortion.findOneAndUpdate(
         { _id: itemId, userId: userId},
         waterPortion,
         {
@@ -60,25 +86,40 @@ export async function updateWaterPortion(itemId, waterPortion, userId, options =
         },
     );
 
-    if (!result) throw createHttpError(404, 'User not found!');
+    if (!result) throw createHttpError(404, 'Entry not found!');
 
     return {
         userWater: result,
     };
+    } catch (error) {
+        if (error.status) {
+            throw error;
+        }
+        throw createHttpError(500, `Error occurred while updating water entry: ${error.message}`);
+    }
+
 }
 
 export async function deleteWaterPortion(itemId) {
-    const result = await WaterPortion.findOneAndDelete({ _id: itemId });
+    try {const result = await WaterPortion.findOneAndDelete({ _id: itemId });
 
     if (!result) {
         throw createHttpError(404, 'Entry not found!');
     }
+        return {_id: result._id};
+    } catch (error) {
+        if (error.status) {
+            throw error;
+        }
+        throw createHttpError(500, `Error occurred while deleting: ${error.message}`);
+    }
 
-    return {_id: result._id};
+
 }
 
 export async function getWaterPortionsForMonth(year, month, userId) {
-    const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
+    try {
+        const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
     const endOfSelectedMonth = endOfMonth(new Date(year, month, 1));
 
     const waterPortions = await WaterPortion.find({
@@ -103,7 +144,17 @@ export async function getWaterPortionsForMonth(year, month, userId) {
 
     });
 
+    if (waterPortions.length === 0) {
+            throw createHttpError(404, 'No water entries found for this month');
+        }
+
     return totalWaterByDay;
+    } catch (error) {
+        if (error.status) {
+            throw error;
+        }
+        throw createHttpError(500, `Error occurred while fetching data: ${error.message}`);
+    }
 }
 
 

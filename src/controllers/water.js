@@ -34,7 +34,7 @@ export async function getMonthWaterController(req, res) {
     parsedMonth < 0 ||
     parsedMonth > 11
   ) {
-    return res.status(400).json({ message: 'Invalid year or month' });
+    return res.status(400).json({status: 400, message: 'Invalid year or month' });
   }
 
   const waterPortionsByDay = await getWaterPortionsForMonth(

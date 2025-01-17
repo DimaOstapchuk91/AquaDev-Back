@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import { WaterPortion } from "../db/models/water.js";
 import { getEndOfDay, getStartOfDay } from "../utils/getDayBounds.js";
 import { endOfMonth, startOfMonth } from "../utils/getMonthBounds.js";
@@ -44,23 +45,36 @@ export const getWaterPortionsForDay = async (userId, req) => {
   };
 };
 
-
-export function getWaterPortionById(itemId) {
-    return WaterPortion.findOne({ _id: itemId });
+export async function addWaterPortion(waterPortion) {
+    return await WaterPortion.create(waterPortion);
 }
 
-export function addWaterPortion(waterPortion) {
-    return WaterPortion.create(waterPortion);
+export async function updateWaterPortion(itemId, waterPortion, userId, options = {}) {
+    const result = await WaterPortion.findOneAndUpdate(
+        { _id: itemId, userId: userId},
+        waterPortion,
+        {
+            new: true,
+            includesResultMetadata: true,
+            ...options,
+        },
+    );
+
+    if (!result) throw createHttpError(404, 'User not found!');
+
+    return {
+        userWater: result,
+    };
 }
 
-export function updateWaterPortion(itemId, waterPortion) {
-    return WaterPortion.findOneAndUpdate({ _id: itemId }, waterPortion, {
-        new: true
-    });
-}
+export async function deleteWaterPortion(itemId) {
+    const result = await WaterPortion.findOneAndDelete({ _id: itemId });
 
-export function deleteWaterPortion(itemId) {
-    return WaterPortion.findOneAndDelete({ _id: itemId });
+    if (!result) {
+        throw createHttpError(404, 'Entry not found!');
+    }
+
+    return result;
 }
 
 export async function getWaterPortionsForMonth(year, month, userId) {

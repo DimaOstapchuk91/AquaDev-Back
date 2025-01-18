@@ -9,7 +9,7 @@ import {
 export async function getCurrentDayWaterController(req, res) {
   const userId = req.user._id;
 
-  const { dateDay, waterPortions, totalWater } = await getWaterPortionsForDay(
+  const { dateDay, transformedTimePortions, totalWater } = await getWaterPortionsForDay(
     userId,
     req,
   );
@@ -18,7 +18,7 @@ export async function getCurrentDayWaterController(req, res) {
     message: 'Data for the selected day retrieved successfully',
     dateDay,
     totalWater,
-    waterPortions,
+    transformedTimePortions,
   });
 }
 

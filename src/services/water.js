@@ -2,6 +2,7 @@ import createHttpError from 'http-errors';
 import { WaterPortion } from '../db/models/water.js';
 import { getEndOfDay, getStartOfDay } from '../utils/getDayBounds.js';
 import { endOfMonth, startOfMonth } from '../utils/getMonthBounds.js';
+import timeConvert from '../utils/timeConvert.js';
 
 export const getWaterPortionsForDay = async (userId, req) => {
   const getDate = req.params;
@@ -16,19 +17,27 @@ export const getWaterPortionsForDay = async (userId, req) => {
   if (!waterPortions)
     throw createHttpError(404, 'No water data recorded for this day.');
 
-  const totalWater = waterPortions.reduce(
+  const transformedTimePortions = waterPortions.map((portion) => ({
+    ...portion._doc,
+    time: timeConvert(portion.time)
+    }),
+  );
+
+  const totalWater = transformedTimePortions.reduce(
     (sum, portion) => sum + portion.amount,
     0,
   );
 
   return {
     dateDay: getDate.date,
-    waterPortions,
+    transformedTimePortions,
     totalWater,
   };
 };
 
 export async function addWaterPortion(waterPortion) {
+  waterPortion.time = new Date(`1970-01-01T${waterPortion.time}:00Z`);
+
   const result = await WaterPortion.create(waterPortion);
 
   if (!result) throw createHttpError(500, 'Failed to create water portion');
@@ -42,6 +51,10 @@ export async function updateWaterPortion(
   userId,
   options = {},
 ) {
+
+  if (waterPortion.time) {
+    waterPortion.time = new Date(`1970-01-01T${waterPortion.time}:00Z`);
+  }
   const result = await WaterPortion.findOneAndUpdate(
     { _id: itemId, userId: userId },
     waterPortion,
@@ -82,7 +95,7 @@ export async function getWaterPortionsForMonth(date, userId) {
     createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
   }).select('amount createdAt');
 
-  if (!waterPortions) throw createHttpError(404, 'Month Portion Not Found');
+  if (!waterPortions) throw createHttpError(404, 'No entries found for this month');
 
   const totalWaterByDay = [];
 

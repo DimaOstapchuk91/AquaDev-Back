@@ -18,9 +18,9 @@ const jsonParser = express.json();
 
 const router = Router();
 
-router.get('/:date', ctrlWrapper(getCurrentDayWaterController));
+router.get('/day/:date', ctrlWrapper(getCurrentDayWaterController));
 
-router.get('/month/:year-:month', ctrlWrapper(getMonthWaterController));
+router.get('/month/:date', ctrlWrapper(getMonthWaterController));
 
 router.post(
   '/',

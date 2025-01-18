@@ -39,7 +39,7 @@ router.post(
 );
 router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 router.post('/logout', ctrlWrapper(logoutUserController));
-router.get('/data', authenticate, ctrlWrapper(gerUserController));
+router.get('/info', authenticate, ctrlWrapper(gerUserController));
 router.patch(
   '/update',
   authenticate,

@@ -7,13 +7,12 @@ security:
   - bearerAuth: []
 requestBody:
   content:
-    multipart/form-data:
+    application/json:
       schema:
         type: object
         required:
           - amount
           - time
-          - userId
         properties:
           amount:
             type: number
@@ -22,9 +21,6 @@ requestBody:
           time:
             type: string
             description: The time when the water was consumed
-          userId:
-            type: string
-            description: The ID of the user who logged the water portion
 responses:
   '201':
     description: Successfully created new water portion
@@ -46,6 +42,8 @@ responses:
             data:
               $ref: '../../components/schemas/water.yaml'
   '400':
-    $ref: ../../components/responses/400.yaml
+    $ref: ../../components/responses/water/400water.yaml
+  '401':
+    $ref: ../../components/responses/water/401water.yaml
   '500':
-    $ref: ../../components/responses/500.yaml
+    $ref: ../../components/responses/water/500water.yaml

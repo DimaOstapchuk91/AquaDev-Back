@@ -7,7 +7,7 @@ const waterPortionSchema = new mongoose.Schema(
             required: true
         },
         time: {
-            type: String,
+            type: Date,
             required: true
         },
         userId: {

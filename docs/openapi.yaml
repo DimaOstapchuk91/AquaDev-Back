@@ -6,11 +6,14 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a documentation of contacts app
-tags:
-  - name: Auth
-    description: Auth operations.
 servers:
+  - url: http://localhost:5173
   - url: http://localhost:3000
+  - url: https://aquadev-back.onrender.com/
+
+tags:
+  - name: Users
+    description: Login User API Route
 paths:
   /users/login:
     post:
@@ -30,15 +33,11 @@ paths:
   /users/google/url:
     get:
       $ref: ../swagger/paths/users/auth/google/googleURL.yaml
-  /users/google/callback:
-    post:
-      $ref: ../swagger/paths/users/auth/google/googleCallback.yaml
   /users:
     get:
       $ref: ../swagger/paths/users/get.yaml
-    patch:
-      $ref: ../swagger/paths/users/patch.yaml
-
+    post:
+      $ref: ../swagger/paths/users/post.yaml
 components:
   securitySchemes:
     cookieAuth:

@@ -166,14 +166,14 @@ export const loginOrSignupWithGoogle = async (req, res, next) => {
     res.cookie('refreshToken', session.refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'None',
       expires: new Date(session.refreshTokenValidUntil),
     });
 
     res.cookie('sessionId', session._id, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'None',
       expires: new Date(session.refreshTokenValidUntil),
     });
 

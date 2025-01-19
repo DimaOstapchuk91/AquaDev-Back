@@ -11,14 +11,9 @@ requestBody:
       schema:
         type: object
         required:
-          - name
           - email
           - password
         properties:
-          name:
-            type: string
-            description: 'Name of the user'
-            example: 'John Doe'
           email:
             type: string
             format: email
@@ -26,6 +21,7 @@ requestBody:
             example: johndoe@example.com
           password:
             type: string
+            format: password
             description: 'Password for registration'
             example: password123
 responses:
@@ -39,6 +35,15 @@ responses:
             userId:
               type: string
               description: 'User`s Id'
+              example: 64af16e9c6b9e71a6c123abc
+            status:
+              type: string
+              description: 'Response status'
+              example: 'success'
+            message:
+              type: string
+              description: 'Response message'
+              example: 'Successfully registered a user'
   '409':
     $ref: '../../../components/responses/users/409.yaml'
   '500':

@@ -38,7 +38,7 @@ properties:
     example: 120
   dailyNorma:
     type: number
-    description: 'User's daily calorie intake'
+    description: 'User`s daily calorie intake'
     example: 2000
   avatar:
     type: string

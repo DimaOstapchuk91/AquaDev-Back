@@ -92,7 +92,7 @@
                     },
                     "data": {
                       "type": "object",
-                      "description": "Data containing the access token",
+                      "$ref": "#/components/schemas/user",
                       "properties": {
                         "accessToken": {
                           "type": "string",
@@ -544,81 +544,6 @@
             "$ref": "#/components/responses/500"
           }
         }
-      },
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Create a new user",
-        "operationId": "users",
-        "description": "Create a new user",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "Email address",
-                    "example": "jonh.doe@example.com"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "User password",
-                    "example": "password"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Details to create a user"
-        },
-        "responses": {
-          "201": {
-            "description": "Create a user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 201
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Seccessfully registered a user"
-                    },
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/user"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
       }
     },
     "/water/{id}": {
@@ -1037,6 +962,60 @@
         "bearerFormat": "JWT"
       }
     },
+    "schemas": {
+      "user": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password",
+          "gender",
+          "weight",
+          "timeActive",
+          "dailyNorma",
+          "avatar"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "example": "jonh.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "password"
+          }
+        }
+      },
+      "water": {
+        "type": "object",
+        "required": [
+          "amount",
+          "time",
+          "userId"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "description": "The amount of water consumed",
+            "example": 70
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time when the water was consumed",
+            "example": "15:20"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user who logged the water portion",
+            "example": "67821d4e075d6ac0ea29e144"
+          }
+        }
+      }
+    },
     "responses": {
       "400": {
         "description": "Bad Request",
@@ -1301,60 +1280,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "schemas": {
-      "user": {
-        "type": "object",
-        "required": [
-          "name",
-          "email",
-          "password",
-          "gender",
-          "weight",
-          "timeActive",
-          "dailyNorma",
-          "avatar"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "Email address",
-            "example": "jonh.doe@example.com"
-          },
-          "password": {
-            "type": "string",
-            "description": "User password",
-            "example": "password"
-          }
-        }
-      },
-      "water": {
-        "type": "object",
-        "required": [
-          "amount",
-          "time",
-          "userId"
-        ],
-        "properties": {
-          "amount": {
-            "type": "number",
-            "format": "float",
-            "description": "The amount of water consumed",
-            "example": 70
-          },
-          "time": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The time when the water was consumed",
-            "example": "15:20"
-          },
-          "userId": {
-            "type": "string",
-            "description": "The ID of the user who logged the water portion",
-            "example": "67821d4e075d6ac0ea29e144"
           }
         }
       }

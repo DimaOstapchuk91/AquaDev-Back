@@ -45,7 +45,7 @@ responses:
               example: 'Successfully logged in a user!'
             data:
               type: object
-              description: 'Data containing the access token'
+              $ref: ../../../components/schemas/users/user.yaml
               properties:
                 accessToken:
                   type: string

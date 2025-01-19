@@ -11,16 +11,19 @@
   },
   "servers": [
     {
+      "url": "http://localhost:5173"
+    },
+    {
       "url": "http://localhost:3000"
     },
     {
-      "url": "http://localhost:5173"
+      "url": "https://aquadev-back.onrender.com/"
     }
   ],
   "tags": [
     {
-      "name": "Auth",
-      "description": "Auth operations."
+      "name": "Users",
+      "description": "Login User API Route"
     }
   ],
   "paths": {
@@ -51,13 +54,15 @@
                   "email": {
                     "type": "string",
                     "format": "email",
-                    "description": "Use is email for authentication",
-                    "example": "joindoe@example.com"
+                    "description": "User's email address",
+                    "example": "user@example.com"
                   },
                   "password": {
                     "type": "string",
                     "format": "password",
-                    "description": "User is password",
+                    "description": "User's password (min: 6, max: 28 characters)",
+                    "minLength": 6,
+                    "maxLength": 28,
                     "example": "password123"
                   }
                 }
@@ -67,21 +72,37 @@
         },
         "responses": {
           "200": {
-            "description": "User logged in successfully",
+            "description": "Successfully logged in a user!",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "accessToken": {
-                      "type": "string",
-                      "description": "Access token",
-                      "example": "wRyjvWY68U9+3zqCqUGK"
+                    "status": {
+                      "type": "integer",
+                      "description": "Status code of the response",
+                      "example": 200
                     },
-                    "refreshToken": {
+                    "message": {
                       "type": "string",
-                      "description": "Refresh token",
-                      "example": "LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/"
+                      "description": "Message describing the outcome of the request",
+                      "example": "Successfully logged in a user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Data containing the access token",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "description": "Access token",
+                          "example": "wRyjvWY68U9+3zqCqUGK"
+                        },
+                        "refreshToken": {
+                          "type": "string",
+                          "description": "Refresh token",
+                          "example": "LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/"
+                        }
+                      }
                     }
                   }
                 }
@@ -221,15 +242,31 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "accessToken": {
-                      "type": "string",
-                      "description": "New access token",
-                      "example": "n4o9T8BkvLuaaiBgdEZn"
+                    "status": {
+                      "type": "integer",
+                      "description": "Status code of the response",
+                      "example": 200
                     },
-                    "refreshToken": {
+                    "message": {
                       "type": "string",
-                      "description": "New refresh token",
-                      "example": "tRRRgqmdISK5vAnu7nESyC4e61KZDGWkplTZ0IQM"
+                      "description": "Message describing the outcome of the request",
+                      "example": "Successfully refreshed a session"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Data containing the new tokens",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "description": "New access token",
+                          "example": "n4o9T8BkvLuaaiBgdEZn"
+                        },
+                        "refreshToken": {
+                          "type": "string",
+                          "description": "New refresh token",
+                          "example": "tRRRgqmdISK5vAnu7nESyC4e61KZDGWkplTZ0IQM"
+                        }
+                      }
                     }
                   }
                 }
@@ -446,102 +483,6 @@
         }
       }
     },
-    "/users/google/callback": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "summary": "Login or Sign Up with Google",
-        "operationId": "loginGoogleOAuthUrl",
-        "description": "Uses a Google OAuth authorization code to log in or register a user",
-        "security": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "code"
-                ],
-                "properties": {
-                  "code": {
-                    "type": "string",
-                    "description": "authorization code received from Google OAuth flow",
-                    "example": "4/0AX4XfWjDqT8PbZ6UYOa9R_mZf"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful login or registration via Google OAuth",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully logged in via Google OAuth!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "accessToken": {
-                          "type": "string",
-                          "description": "JWT access token for authentication",
-                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                        },
-                        "user": {
-                          "type": "object",
-                          "description": "Details of the authenticated user",
-                          "properties": {
-                            "id": {
-                              "type": "string",
-                              "example": "64af16e9c6b9e71a6c123abc"
-                            },
-                            "email": {
-                              "type": "string",
-                              "format": "email",
-                              "example": "johndoe@example.com"
-                            },
-                            "name": {
-                              "type": "string",
-                              "example": "Jonh Doe"
-                            },
-                            "avatar": {
-                              "type": "string",
-                              "format": "uri",
-                              "example": "https://example.com/avatar.jpg"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
     "/users": {
       "get": {
         "tags": [
@@ -550,11 +491,7 @@
         "summary": "Get User Data",
         "operationId": "getUserData",
         "description": "Retrieve the authenticated user's data.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "responses": {
           "200": {
             "description": "User data retrieved successfully",
@@ -588,82 +525,6 @@
           },
           "500": {
             "$ref": "#/components/responses/500"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Update User Data",
-        "operationId": "updateUsers",
-        "description": "Update authenticated user's details, such as email, name, or avatar.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "description": "Updated email address of the user",
-                    "example": "updateduser@example.com"
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Updated name of the user",
-                    "example": "Updated Name"
-                  },
-                  "avatar": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "New avatar image to upload (optional)"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User data updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "type": "string",
-                      "example": "updateduser@example.com"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Updated Name"
-                    },
-                    "avatar": {
-                      "type": "string",
-                      "example": "https://example.com/updated-avatar.jpg"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
           }
         }
       },

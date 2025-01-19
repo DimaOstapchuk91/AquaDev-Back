@@ -29,20 +29,32 @@ requestBody:
             example: 'password123'
 responses:
   '200':
-    description: 'Successfully logged in an user!'
+    description: 'Successfully logged in a user!'
     content:
       application/json:
         schema:
           type: object
           properties:
-            accessToken:
+            status:
+              type: integer
+              description: 'Status code of the response'
+              example: 200
+            message:
               type: string
-              description: 'Access token'
-              example: wRyjvWY68U9+3zqCqUGK
-            refreshToken:
-              type: string
-              description: 'Refresh token'
-              example: LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/
+              description: 'Message describing the outcome of the request'
+              example: 'Successfully logged in a user!'
+            data:
+              type: object
+              description: 'Data containing the access token'
+              properties:
+                accessToken:
+                  type: string
+                  description: 'Access token'
+                  example: 'wRyjvWY68U9+3zqCqUGK'
+                refreshToken:
+                  type: string
+                  description: 'Refresh token'
+                  example: 'LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/'
   '401':
     $ref: ../../../components/responses/users/401.yaml
   '404':

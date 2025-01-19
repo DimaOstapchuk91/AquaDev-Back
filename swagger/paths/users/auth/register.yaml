@@ -23,6 +23,8 @@ requestBody:
             type: string
             format: password
             description: 'Password for registration'
+            minLength: 6
+            maxLength: 28
             example: password123
 responses:
   '201':
@@ -32,18 +34,22 @@ responses:
         schema:
           type: object
           properties:
-            userId:
-              type: string
-              description: 'User`s Id'
-              example: 64af16e9c6b9e71a6c123abc
             status:
               type: string
               description: 'Response status'
-              example: 'success'
+              example: 201
             message:
               type: string
               description: 'Response message'
               example: 'Successfully registered a user'
+            data:
+              type: object
+              description: 'User data'
+              properties:
+                userId:
+                  type: string
+                  description: 'User`s Id'
+                  example: 64af16e9c6b9e71a6c123abc
   '409':
     $ref: '../../../components/responses/users/409.yaml'
   '500':

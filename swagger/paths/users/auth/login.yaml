@@ -51,10 +51,17 @@ responses:
                   type: string
                   description: 'Access token'
                   example: 'wRyjvWY68U9+3zqCqUGK'
-                refreshToken:
-                  type: string
-                  description: 'Refresh token'
-                  example: 'LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/'
+    headers:
+      Set-Cookie:
+        description: 'Cookies set for maintaining session'
+        schema:
+          type: string
+          example: 'sessionId=session_12345; HttpOnly; Secure; SameSite=Strict'
+      Set-Cookie2:
+        description: 'Another cookie for session handling'
+        schema:
+          type: string
+          example: 'anotherCookie=some_value; HttpOnly; Secure; SameSite=Strict'
   '401':
     $ref: ../../../components/responses/users/401.yaml
   '404':

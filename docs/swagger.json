@@ -22,8 +22,12 @@
   ],
   "tags": [
     {
-      "name": "Users",
-      "description": "Login User API Route"
+      "name": "Authentication",
+      "description": "Authentication operations for users"
+    },
+    {
+      "name": "User",
+      "description": "User management operations (registration, profile, etc.)"
     }
   ],
   "paths": {
@@ -96,15 +100,26 @@
                           "type": "string",
                           "description": "Access token",
                           "example": "wRyjvWY68U9+3zqCqUGK"
-                        },
-                        "refreshToken": {
-                          "type": "string",
-                          "description": "Refresh token",
-                          "example": "LJUxA/vjO+xfhOXf7U3SI8TyfzsB+ZLrWECwrhU/"
                         }
                       }
                     }
                   }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "description": "Cookies set for maintaining session",
+                "schema": {
+                  "type": "string",
+                  "example": "sessionId=session_12345; HttpOnly; Secure; SameSite=Strict"
+                }
+              },
+              "Set-Cookie2": {
+                "description": "Another cookie for session handling",
+                "schema": {
+                  "type": "string",
+                  "example": "anotherCookie=some_value; HttpOnly; Secure; SameSite=Strict"
                 }
               }
             }
@@ -151,6 +166,8 @@
                     "type": "string",
                     "format": "password",
                     "description": "Password for registration",
+                    "minLength": 6,
+                    "maxLength": 28,
                     "example": "password123"
                   }
                 }
@@ -166,20 +183,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "userId": {
-                      "type": "string",
-                      "description": "User`s Id",
-                      "example": "64af16e9c6b9e71a6c123abc"
-                    },
                     "status": {
                       "type": "string",
                       "description": "Response status",
-                      "example": "success"
+                      "example": 201
                     },
                     "message": {
                       "type": "string",
                       "description": "Response message",
                       "example": "Successfully registered a user"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "User data",
+                      "properties": {
+                        "userId": {
+                          "type": "string",
+                          "description": "User`s Id",
+                          "example": "64af16e9c6b9e71a6c123abc"
+                        }
+                      }
                     }
                   }
                 }
@@ -530,7 +553,7 @@
       },
       "post": {
         "tags": [
-          "User authentication"
+          "User"
         ],
         "summary": "Create a new user",
         "operationId": "users",

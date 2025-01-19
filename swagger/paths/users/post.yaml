@@ -1,5 +1,5 @@
 tags:
-  - User authentication
+  - User
 summary: Create a new user
 operationId: users
 description: 'Create a new user'

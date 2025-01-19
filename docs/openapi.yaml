@@ -11,8 +11,10 @@ servers:
   - url: http://localhost:3000
   - url: https://aquadev-back.onrender.com/
 tags:
-  - name: Users
-    description: Login User API Route
+  - name: Authentication
+    description: Authentication operations for users
+  - name: User
+    description: User management operations (registration, profile, etc.)
 paths:
   /users/login:
     post:

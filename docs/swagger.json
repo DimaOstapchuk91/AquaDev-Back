@@ -11,12 +11,6 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5173"
-    },
-    {
-      "url": "http://localhost:3000"
-    },
-    {
       "url": "https://aquadev-back.onrender.com/"
     }
   ],
@@ -364,7 +358,7 @@
     "/users/update": {
       "patch": {
         "tags": [
-          "Users"
+          "User"
         ],
         "summary": "Update user profile",
         "operationId": "update",
@@ -569,11 +563,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "User name",
-                    "example": "John Doe"
-                  },
                   "email": {
                     "type": "string",
                     "description": "Email address",
@@ -583,35 +572,6 @@
                     "type": "string",
                     "description": "User password",
                     "example": "password"
-                  },
-                  "gender": {
-                    "type": "string",
-                    "description": "User gender",
-                    "enum": [
-                      "woman",
-                      "man"
-                    ],
-                    "example": "man"
-                  },
-                  "weight": {
-                    "type": "number",
-                    "description": "User weight in kilograms",
-                    "example": 70
-                  },
-                  "timeActive": {
-                    "type": "number",
-                    "description": "User activity time in minutes",
-                    "example": 120
-                  },
-                  "dailyNorma": {
-                    "type": "number",
-                    "description": "User`s daily calorie intake",
-                    "example": 2000
-                  },
-                  "avatar": {
-                    "type": "string",
-                    "description": "User avatar URL",
-                    "example": "https:://example.com/avatar.jpg"
                   }
                 }
               }
@@ -1359,11 +1319,6 @@
           "avatar"
         ],
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User name",
-            "example": "John Doe"
-          },
           "email": {
             "type": "string",
             "description": "Email address",
@@ -1373,35 +1328,6 @@
             "type": "string",
             "description": "User password",
             "example": "password"
-          },
-          "gender": {
-            "type": "string",
-            "description": "User gender",
-            "enum": [
-              "woman",
-              "man"
-            ],
-            "example": "man"
-          },
-          "weight": {
-            "type": "number",
-            "description": "User weight in kilograms",
-            "example": 70
-          },
-          "timeActive": {
-            "type": "number",
-            "description": "User activity time in minutes",
-            "example": 120
-          },
-          "dailyNorma": {
-            "type": "number",
-            "description": "User`s daily calorie intake",
-            "example": 2000
-          },
-          "avatar": {
-            "type": "string",
-            "description": "User avatar URL",
-            "example": "https:://example.com/avatar.jpg"
           }
         }
       },

@@ -11,10 +11,10 @@ requestBody:
       schema:
         type: object
         properties:
-          name:
-            type: string
-            description: 'User name'
-            example: 'John Doe'
+          # name:
+          #   type: string
+          #   description: 'User name'
+          #   example: 'John Doe'
           email:
             type: string
             description: 'Email address'
@@ -23,29 +23,29 @@ requestBody:
             type: string
             description: 'User password'
             example: password
-          gender:
-            type: string
-            description: 'User gender'
-            enum:
-              - woman
-              - man
-            example: man
-          weight:
-            type: number
-            description: 'User weight in kilograms'
-            example: 70
-          timeActive:
-            type: number
-            description: 'User activity time in minutes'
-            example: 120
-          dailyNorma:
-            type: number
-            description: 'User`s daily calorie intake'
-            example: 2000
-          avatar:
-            type: string
-            description: 'User avatar URL'
-            example: https:://example.com/avatar.jpg
+          # gender:
+          #   type: string
+          #   description: 'User gender'
+          #   enum:
+          #     - woman
+          #     - man
+          #   example: man
+          # weight:
+          #   type: number
+          #   description: 'User weight in kilograms'
+          #   example: 70
+          # timeActive:
+          #   type: number
+          #   description: 'User activity time in minutes'
+          #   example: 120
+          # dailyNorma:
+          #   type: number
+          #   description: 'User`s daily calorie intake'
+          #   example: 2000
+          # avatar:
+          #   type: string
+          #   description: 'User avatar URL'
+          #   example: https:://example.com/avatar.jpg
   description: Details to create a user
 responses:
   '201':

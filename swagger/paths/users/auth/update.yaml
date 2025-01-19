@@ -1,5 +1,5 @@
 tags:
-  - Users
+  - User
 summary: Update user profile
 operationId: update
 description: "Updates the user's profile information, including avatar if provided."

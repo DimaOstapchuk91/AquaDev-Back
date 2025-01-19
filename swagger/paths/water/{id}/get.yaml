@@ -2,7 +2,7 @@ tags:
   - Water
 summary: 'Get water by id'
 operationId: getWaterById
-description:  Get water tracking data by ID 
+description: Get water tracking data by ID
 security:
   - bearerAuth: []
 parameters:
@@ -61,10 +61,10 @@ responses:
               properties:
                 message:
                   type: string
-                  example: "Route not found"
+                  example: 'Route not found'
           required:
             - status
             - message
             - data
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: ../../../components/responses/500.yaml

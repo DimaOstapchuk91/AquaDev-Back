@@ -7,11 +7,17 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: http://localhost:3000
   - url: https://aquadev-back.onrender.com/
+
 tags:
+  - name: Authentication
+    description: Authentication operations for users
+  - name: User
+    description: User management operations (registration, profile, etc.)
+
   - name: Water
     description: Operations related to water tracking.
+
 paths:
   /users/login:
     post:
@@ -31,14 +37,9 @@ paths:
   /users/google/url:
     get:
       $ref: ../swagger/paths/users/auth/google/googleURL.yaml
-  /users/google/callback:
-    post:
-      $ref: ../swagger/paths/users/auth/google/googleCallback.yaml
   /users:
     get:
       $ref: ../swagger/paths/users/get.yaml
-    patch:
-      $ref: ../swagger/paths/users/patch.yaml
   /water/{id}:
     delete:
       $ref: ../swagger/paths/water/{id}/delete.yaml

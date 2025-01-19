@@ -11,14 +11,8 @@ requestBody:
       schema:
         type: object
         required:
-          - name
           - email
-          - password
         properties:
-          name:
-            type: string
-            description: 'Name of the user'
-            example: 'John Doe'
           email:
             type: string
             format: email
@@ -26,8 +20,12 @@ requestBody:
             example: johndoe@example.com
           password:
             type: string
-            description: 'Password for registration'
+            format: password
+            description: 'Password for registration (optional if updating other fields)'
+            minLength: 6
+            maxLength: 28
             example: password123
+
 responses:
   '201':
     description: 'User registration successfully'
@@ -36,9 +34,27 @@ responses:
         schema:
           type: object
           properties:
-            userId:
+            status:
               type: string
-              description: 'User`s Id'
+              description: 'Response status'
+              example: 201
+            message:
+              type: string
+              description: 'Response message'
+              example: 'Successfully registered a user'
+            data:
+              type: object
+              $ref: ../../../components/schemas/user.yaml
+              # properties:
+              #   email:
+              #     type: string
+              #     description: 'User email address'
+              #     example: johndoe@example.com
+              #   password:
+              #     type: string
+              #     description: 'User password'
+              #     example: password
+
   '409':
     $ref: '../../../components/responses/users/409.yaml'
   '500':

@@ -3,8 +3,7 @@ tags:
 summary: 'Get User Data'
 operationId: 'getUserData'
 description: "Retrieve the authenticated user's data."
-security:
-  - bearerAuth: []
+security: []
 responses:
   '200':
     description: 'User data retrieved successfully'

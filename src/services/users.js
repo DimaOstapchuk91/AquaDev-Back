@@ -89,7 +89,10 @@ export const logoutUser = async (cookies) => {
   if (!sessionId && !refreshToken)
     throw createHttpError(401, 'Authentication failed. Session not found');
 
-  await Session.deleteOne({ _id: sessionId, refreshToken: refreshToken });
+  await Session.deleteOne({
+    _id: sessionId,
+    refreshToken: refreshToken,
+  });
 };
 
 // ==============================================

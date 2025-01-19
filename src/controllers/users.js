@@ -72,7 +72,7 @@ export const refreshUserSessionController = async (req, res) => {
 
   res.status(200).json({
     status: 200,
-    secure: true,
+
     message: 'Successfully refreshed a session',
     data: { accessToken: session.accessToken },
   });
@@ -81,8 +81,19 @@ export const refreshUserSessionController = async (req, res) => {
 export const logoutUserController = async (req, res) => {
   await logoutUser(req.cookies);
 
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    path: '/',
+  });
+
+  res.clearCookie('sessionId', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    path: '/',
+  });
 
   res.status(204).end();
 };

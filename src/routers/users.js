@@ -19,6 +19,7 @@ import {
 } from '../controllers/users.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/upload.js';
+import { getAllUsersController } from '../controllers/users.js';
 
 const jsonParser = express.json();
 
@@ -38,11 +39,10 @@ router.post(
 );
 router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 router.post('/logout', ctrlWrapper(logoutUserController));
-router.get('/data', authenticate, ctrlWrapper(gerUserController));
+router.get('/info', authenticate, ctrlWrapper(gerUserController));
 router.patch(
   '/update',
   authenticate,
-  jsonParser,
   upload.single('avatar'),
   validateBody(updateUserSchema),
   ctrlWrapper(updateUserController),
@@ -56,5 +56,7 @@ router.post(
   validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
 );
+
+router.get('/count', ctrlWrapper(getAllUsersController));
 
 export default router;

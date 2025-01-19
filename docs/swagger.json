@@ -2,12 +2,12 @@
   "openapi": "3.1.0",
   "info": {
     "version": "1.0.0",
-    "title": "Contacts app",
+    "title": "AquaTrack",
+    "description": "This is the documentation for AquaTrack app",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "description": "This is a documentation of contacts app"
+    }
   },
   "servers": [
     {
@@ -22,12 +22,17 @@
   ],
   "tags": [
     {
+
       "name": "Authentication",
       "description": "Authentication operations for users"
     },
     {
       "name": "User",
       "description": "User management operations (registration, profile, etc.)"
+
+      "name": "Water",
+      "description": "Operations related to water tracking."
+
     }
   ],
   "paths": {
@@ -660,6 +665,408 @@
           }
         }
       }
+    },
+    "/water/{id}": {
+      "delete": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Delete water by ID",
+        "operationId": "deleteWaterPortion",
+        "description": "Delete water portion by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the contact to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted water portion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No Content"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404-2"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-2"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Update water by ID",
+        "description": "Update specific fields of water portion by ID.",
+        "operationId": "updateWaterPortion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the contact to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Fields to update in the contact",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "The amount of water consumed",
+                    "example": 70
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "The time when the water was consumed",
+                    "example": "15:20"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user who logged the water portion",
+                    "example": "1234567890abcdef"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An entry updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully updated an entry"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/water"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400-2"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-2"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-2"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Get water by id",
+        "operationId": "getWaterById",
+        "description": "Get water tracking data by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65ca67e7ae7f10c88b598384"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of water tracking data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successful retrieval of water tracking data"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/water"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid year or month",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid year or month"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "NotFoundError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Route not found"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500-2"
+          }
+        }
+      }
+    },
+    "/water": {
+      "post": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Create water tracking data",
+        "operationId": "createWaterData",
+        "description": "Create a water tracking with payload",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "amount",
+                  "time",
+                  "userId"
+                ],
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "The amount of water consumed"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "The time when the water was consumed"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The ID of the user who logged the water portion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created new water portion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Water portion is successfully added!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/water"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400-2"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-2"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Get water data for the current day",
+        "description": "Retrieves water portions consumed on the current day, along with the total amount of water consumed.",
+        "operationId": "getCurrentDayWater",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of water data for the current day",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "totalWater",
+                    "waterPortions"
+                  ],
+                  "properties": {
+                    "totalWater": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "The total amount of water consumed on the current day",
+                      "example": 60
+                    },
+                    "waterPortions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "amount": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "The amount of water consumed in this portion",
+                            "example": 50
+                          },
+                          "time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The time when the water was consumed",
+                            "example": "11:20"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "description": "The ID of the user who logged the water portion",
+                            "example": "6782c8efc7b76099e5faba53"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400-2"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-2"
+          },
+          "500": {
+            "$ref": "#/components/responses/500-2"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -825,6 +1232,149 @@
                 }
               }
             }
+          }
+        }
+      },
+      "500-2": {
+        "description": "Internal server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal server Error"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404-2": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "NotFoundError"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Entry not found!"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "status",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "400-2": {
+        "description": "BadRequestError",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "BadRequestError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "BadRequestError"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "example": [
+                        {}
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "water": {
+        "type": "object",
+        "required": [
+          "amount",
+          "time",
+          "userId"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "description": "The amount of water consumed",
+            "example": 70
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time when the water was consumed",
+            "example": "15:20"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user who logged the water portion",
+            "example": "67821d4e075d6ac0ea29e144"
           }
         }
       }

@@ -10,6 +10,7 @@ import {
 } from '../services/users.js';
 import { generateAutUrl } from '../utils/googleOAuth2.js';
 import { uploadToCloudinary } from '../utils/uploadToCloudinary .js';
+import { getAllUsers } from '../services/users.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -17,7 +18,7 @@ export const registerUserController = async (req, res) => {
   res.status(201).json({
     status: 201,
     message: 'Seccessfully registered a user',
-    data: user,
+    data: { email: user.email },
   });
 };
 
@@ -27,14 +28,14 @@ export const loginUserController = async (req, res) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'None',
     expires: new Date(Date.now() + THIRTY_DAY),
   });
 
@@ -45,7 +46,7 @@ export const loginUserController = async (req, res) => {
   });
 };
 
-const setupSession = (res, session) => {
+export const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     secure: true,
@@ -71,6 +72,7 @@ export const refreshUserSessionController = async (req, res) => {
 
   res.status(200).json({
     status: 200,
+    secure: true,
     message: 'Successfully refreshed a session',
     data: { accessToken: session.accessToken },
   });
@@ -157,4 +159,14 @@ export const loginWithGoogleController = async (req, res) => {
       error: err.message,
     });
   }
+};
+
+export const getAllUsersController = async (req, res) => {
+  const usersCount = await getAllUsers();
+
+  res.json({
+    status: 200,
+    message: 'Successfully found the amount of users!',
+    usersAmount: usersCount,
+  });
 };

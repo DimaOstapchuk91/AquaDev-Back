@@ -1,66 +1,104 @@
-import { WaterPortion } from "../db/models/water.js";
-import { getEndOfDay, getStartOfDay } from "../utils/getDayBounds.js";
-import { endOfMonth, startOfMonth } from "../utils/getMonthBounds.js";
+import createHttpError from 'http-errors';
+import { WaterPortion } from '../db/models/water.js';
+import { getEndOfDay, getStartOfDay } from '../utils/getDayBounds.js';
+import { endOfMonth, startOfMonth } from '../utils/getMonthBounds.js';
 
+export const getWaterPortionsForDay = async (userId, req) => {
+  const getDate = req.params;
+  const startOfDay = getStartOfDay(getDate.date);
+  const endOfDay = getEndOfDay(getDate.date);
 
-export async function getWaterPortionsForDay(userId) {
-    const startOfDay = getStartOfDay();
-    const endOfDay = getEndOfDay();
+  const waterPortions = await WaterPortion.find({
+    userId: userId,
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  });
 
-    const waterPortions = await WaterPortion.find({
-        userId,
-        createdAt: { $gte: startOfDay, $lt: endOfDay },
-    }).select('amount time createdAt');
+  if (!waterPortions)
+    throw createHttpError(404, 'No water data recorded for this day.');
 
-    const totalWater = waterPortions.reduce((sum, portion) => sum + portion.amount, 0);
+  const totalWater = waterPortions.reduce(
+    (sum, portion) => sum + portion.amount,
+    0,
+  );
 
-    return {
-        waterPortions,
-        totalWater
-    };
+  return {
+    dateDay: getDate.date,
+    waterPortions,
+    totalWater,
+  };
+};
+
+export async function addWaterPortion(waterPortion) {
+  const result = await WaterPortion.create(waterPortion);
+
+  if (!result) throw createHttpError(500, 'Failed to create water portion');
+
+  return result;
 }
 
-export function getWaterPortionById(itemId) {
-    return WaterPortion.findOne({ _id: itemId });
+export async function updateWaterPortion(
+  itemId,
+  waterPortion,
+  userId,
+  options = {},
+) {
+  const result = await WaterPortion.findOneAndUpdate(
+    { _id: itemId, userId: userId },
+    waterPortion,
+    {
+      new: true,
+      includesResultMetadata: true,
+      ...options,
+    },
+  );
+
+  if (!result)
+    throw createHttpError(404, `Water portion with ID ${itemId} not found`);
+
+  return {
+    userWater: result,
+  };
 }
 
-export function addWaterPortion(waterPortion) {
-    return WaterPortion.create(waterPortion);
+export async function deleteWaterPortion(itemId) {
+  const result = await WaterPortion.findOneAndDelete({ _id: itemId });
+
+  if (!result) {
+    throw createHttpError(404, `Water portion with ID ${itemId} not found.`);
+  }
+
+  return {
+    _id: result._id,
+    amount: result.amount,
+  };
 }
 
-export function updateWaterPortion(itemId, waterPortion) {
-    return WaterPortion.findOneAndUpdate({ _id: itemId }, waterPortion, {
-        new: true
-    });
-}
+export async function getWaterPortionsForMonth(date, userId) {
+  const startOfSelectedMonth = startOfMonth(new Date(date));
+  const endOfSelectedMonth = endOfMonth(new Date(date));
 
-export function deleteWaterPortion(itemId) {
-    return WaterPortion.findOneAndDelete({ _id: itemId });
-}
+  const waterPortions = await WaterPortion.find({
+    userId: userId,
+    createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
+  }).select('amount createdAt');
 
-export async function getWaterPortionsForMonth(year, month, userId) {
-    const startOfSelectedMonth = startOfMonth(new Date(year, month, 1));
-    const endOfSelectedMonth = endOfMonth(new Date(year, month, 1));
+  if (!waterPortions) throw createHttpError(404, 'Month Portion Not Found');
 
-    const waterPortions = await WaterPortion.find({
-        userId,
-        createdAt: { $gte: startOfSelectedMonth, $lt: endOfSelectedMonth },
-    }).select('_id amount time createdAt');
+  const totalWaterByDay = [];
 
-    const waterPortionsByDay = {};
+  waterPortions.forEach((portion) => {
+    const day = portion.createdAt.toISOString().slice(0, 10);
 
-    waterPortions.forEach(portion => {
-        const day = portion.createdAt.toISOString().slice(0, 10);
-        if (!waterPortionsByDay[day]) {
-            waterPortionsByDay[day] = [];
-        }
-        waterPortionsByDay[day].push({
-            id: portion._id,
-            amount: portion.amount,
-            time: portion.time,
-            createdAt: portion.createdAt
-        });
-    });
+    let dayRecord = totalWaterByDay.find((record) => record.date === day);
 
-    return waterPortionsByDay;
+    if (dayRecord) {
+      dayRecord.totalWater += portion.amount;
+    } else {
+      totalWaterByDay.push({
+        date: day,
+        totalWater: portion.amount,
+      });
+    }
+  });
+  return totalWaterByDay;
 }

@@ -18,6 +18,13 @@ requestBody:
             format: email
             description: 'Email for registration'
             example: johndoe@example.com
+          password:
+            type: string
+            format: password
+            description: 'Password for registration (optional if updating other fields)'
+            minLength: 6
+            maxLength: 28
+            example: password123
 
 responses:
   '201':
@@ -37,12 +44,17 @@ responses:
               example: 'Successfully registered a user'
             data:
               type: object
-              $ref: ../../../components/schemas/users/users.yaml
-              properties:
-                email:
-                  type: string
-                  description: 'User email address'
-                  example: johndoe@example.com
+              $ref: ../../../components/schemas/user.yaml
+              # properties:
+              #   email:
+              #     type: string
+              #     description: 'User email address'
+              #     example: johndoe@example.com
+              #   password:
+              #     type: string
+              #     description: 'User password'
+              #     example: password
+
   '409':
     $ref: '../../../components/responses/users/409.yaml'
   '500':

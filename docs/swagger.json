@@ -22,17 +22,16 @@
   ],
   "tags": [
     {
-
       "name": "Authentication",
       "description": "Authentication operations for users"
     },
     {
       "name": "User",
       "description": "User management operations (registration, profile, etc.)"
-
+    },
+    {
       "name": "Water",
       "description": "Operations related to water tracking."
-
     }
   ],
   "paths": {
@@ -370,11 +369,7 @@
         "summary": "Update user profile",
         "operationId": "update",
         "description": "Updates the user's profile information, including avatar if provided.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -1351,35 +1346,6 @@
       }
     },
     "schemas": {
-      "water": {
-        "type": "object",
-        "required": [
-          "amount",
-          "time",
-          "userId"
-        ],
-        "properties": {
-          "amount": {
-            "type": "number",
-            "format": "float",
-            "description": "The amount of water consumed",
-            "example": 70
-          },
-          "time": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The time when the water was consumed",
-            "example": "15:20"
-          },
-          "userId": {
-            "type": "string",
-            "description": "The ID of the user who logged the water portion",
-            "example": "67821d4e075d6ac0ea29e144"
-          }
-        }
-      }
-    },
-    "schemas": {
       "user": {
         "type": "object",
         "required": [
@@ -1436,6 +1402,33 @@
             "type": "string",
             "description": "User avatar URL",
             "example": "https:://example.com/avatar.jpg"
+          }
+        }
+      },
+      "water": {
+        "type": "object",
+        "required": [
+          "amount",
+          "time",
+          "userId"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "description": "The amount of water consumed",
+            "example": 70
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time when the water was consumed",
+            "example": "15:20"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user who logged the water portion",
+            "example": "67821d4e075d6ac0ea29e144"
           }
         }
       }

@@ -18,9 +18,14 @@ requestBody:
             type: number
             format: float
             description: The amount of water consumed
+            minimum: 50
+            maximum: 5000
+            example: 70
           time:
             type: string
             description: The time when the water was consumed
+            example: 15:20
+            pattern: '^([01]?[0-9]|2[0-3]):([0-5][0-9])$'
 responses:
   '201':
     description: Successfully created new water portion

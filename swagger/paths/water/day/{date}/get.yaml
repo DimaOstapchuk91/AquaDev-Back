@@ -1,0 +1,57 @@
+tags:
+  - Water
+summary: Retrieve water consumption data for a specific day
+description: Retrieves total water consumption and details of all water portions for a selected day.
+operationId: getWaterByDay
+security:
+  - bearerAuth: []
+parameters:
+  - name: date
+    in: path
+    required: true
+    description: The date for which water data is requested
+    schema:
+      type: string
+      format: date-time
+      example: "2025-01-19T18:25:06.956Z"
+responses:
+  '200':
+    description: Data for the selected day retrieved successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - message
+            - dateDay
+            - totalWater
+            - waterPortions
+          properties:
+            message:
+              type: string
+              example: "Data for the selected day retrieved successfully"
+            dateDay:
+              type: string
+              format: date-time
+              example: "2025-01-19T18:25:06.956Z"
+            totalWater:
+              type: integer
+              example: 310
+            waterPortions:
+              type: array
+              items:
+                type: object
+                properties:
+                  amount:
+                    type: number
+                    format: float
+                    example: 70
+                  time:
+                    type: string
+                    example: "15:20"
+  '401':
+    $ref: ../../../../components/responses/water/401water.yaml
+  '404':
+    $ref: '../../../../components/responses/water/404water.yaml'
+  '500':
+    $ref: '../../../../components/responses/water/500water.yaml'

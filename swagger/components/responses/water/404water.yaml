@@ -15,7 +15,7 @@ content:
               properties:
                 message:
                   type: string
-                  example: Entry not found!
+                  example: Route not found
           required:
             - status
             - message

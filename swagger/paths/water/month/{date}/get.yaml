@@ -1,0 +1,51 @@
+tags:
+  - Water
+summary: Retrieve water consumption data for a specific month
+description: Retrieves total water consumption data and details for all water portions for a selected month.
+operationId: getWaterByMonth
+security:
+  - bearerAuth: []
+parameters:
+  - name: date
+    in: path
+    required: true
+    description: The month for which water data is requested
+    schema:
+      type: string
+      example: "2025-01-19"
+responses:
+  '200':
+    description: Data for the selected month retrieved successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - monthPortions
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: "Successfully portions month"
+            monthPortions:
+              type: array
+              items:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date
+                    example: "2025-01-11"
+                  totalWater:
+                    type: integer
+                    example: 750
+  '400':
+    $ref: ../../../../components/responses/water/400water.yaml
+  '404':
+    $ref: '../../../../components/responses/water/404water.yaml'
+  '500':
+    $ref: '../../../../components/responses/water/500water.yaml'

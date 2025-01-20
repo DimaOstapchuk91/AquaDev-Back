@@ -13,17 +13,32 @@ parameters:
     schema:
       type: string
 responses:
-  '204':
+  '200':
     description: Successfully deleted water portion
     content:
       application/json:
         schema:
           type: object
+          required:
+            - status
+            - message
+            - data
           properties:
+            status:
+              type: integer
+              example: 200
             message:
               type: string
-              example: No Content
+              example: "Entry successfully deleted!"
+            data:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 70
+  '401':
+    $ref: ../../../components/responses/water/401water.yaml
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: ../../../components/responses/water/404water.yaml
   '500':
-    $ref: ../../../components/responses/500.yaml 
+    $ref: ../../../components/responses/water/500water.yaml

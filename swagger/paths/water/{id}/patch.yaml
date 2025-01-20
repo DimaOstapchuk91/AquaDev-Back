@@ -9,14 +9,14 @@ parameters:
   - name: id
     in: path
     required: true
-    description: ID of the contact to update
+    description: ID of the water entry to update
     schema:
       type: string
 requestBody:
-  description: Fields to update in the contact
+  description: Fields to update in the water entry
   required: true
   content:
-    multipart/form-data:
+    application/json:
       schema:
         type: object
         properties:
@@ -29,10 +29,6 @@ requestBody:
             type: string
             description: The time when the water was consumed
             example: 15:20
-          userId:
-            type: string
-            description: The ID of the user who logged the water portion
-            example: '1234567890abcdef'
 responses:
   '200':
     description: An entry updated successfully
@@ -50,13 +46,15 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully updated an entry
+              example: Successfully updated an entry!
             data:
               type: object
-              $ref: '../../../components/schemas/water.yaml'
+              properties:
+                userWater:
+                  $ref: '../../../components/schemas/water.yaml'
   '400':
-    $ref: '../../../components/responses/400.yaml'
+    $ref: '../../../components/responses/water/400water.yaml'
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: '../../../components/responses/water/404water.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../../components/responses/water/500water.yaml'

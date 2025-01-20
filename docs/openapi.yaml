@@ -14,7 +14,6 @@ tags:
     description: Authentication operations for users
   - name: User
     description: User management operations (registration, profile, etc.)
-
   - name: Water
     description: Operations related to water tracking.
 
@@ -40,18 +39,21 @@ paths:
   /users:
     get:
       $ref: ../swagger/paths/users/get.yaml
+  /water/day/{date}:
+    get:
+      $ref: ../swagger/paths/water/day/{date}/get.yaml
+  /water/month/{date}:
+    get:
+      $ref: ../swagger/paths/water/month/{date}/get.yaml
   /water/{id}:
     delete:
       $ref: ../swagger/paths/water/{id}/delete.yaml
     patch:
       $ref: ../swagger/paths/water/{id}/patch.yaml
-    get:
-      $ref: ../swagger/paths/water/{id}/get.yaml
   /water:
     post:
       $ref: ../swagger/paths/water/post.yaml
-    get:
-      $ref: ../swagger/paths/water/get.yaml
+
 components:
   securitySchemes:
     cookieAuth:

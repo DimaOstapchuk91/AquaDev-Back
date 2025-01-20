@@ -18,7 +18,7 @@ export const registerUserController = async (req, res) => {
   res.status(201).json({
     status: 201,
     message: 'Seccessfully registered a user',
-    data: { email: user.email },
+    data: user,
   });
 };
 
@@ -132,6 +132,7 @@ export const updateUserController = async (req, res) => {
   });
 };
 
+
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAutUrl();
   res.status(200).json({
@@ -181,3 +182,4 @@ export const getAllUsersController = async (req, res) => {
     usersAmount: usersCount,
   });
 };
+

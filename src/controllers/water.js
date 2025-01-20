@@ -15,7 +15,6 @@ export async function getCurrentDayWaterController(req, res) {
   );
 
   res.status(200).json({
-    message: 'Data for the selected day retrieved successfully',
     dateDay,
     totalWater,
     waterPortions,
@@ -23,16 +22,27 @@ export async function getCurrentDayWaterController(req, res) {
 }
 
 export async function getMonthWaterController(req, res) {
-  const { date } = req.params;
+  const { year, month } = req.params;
   const userId = req.user._id;
 
-  const waterPortionsByDay = await getWaterPortionsForMonth(date, userId);
+  const parsedYear = parseInt(year, 10);
+  const parsedMonth = parseInt(month, 10) - 1;
 
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully portions month',
-    monthPortions: waterPortionsByDay,
-  });
+  if (
+    isNaN(parsedYear) ||
+    isNaN(parsedMonth) ||
+    parsedMonth < 0 ||
+    parsedMonth > 11
+  ) {
+    return res.status(400).json({status: 400, message: 'Invalid year or month' });
+  }
+
+  const waterPortionsByDay = await getWaterPortionsForMonth(
+    parsedYear,
+    parsedMonth,
+    userId,
+  );
+  res.status(200).json(waterPortionsByDay);
 }
 
 export async function addWaterPortionController(req, res) {
@@ -70,13 +80,8 @@ export async function updateWaterPortionController(req, res) {
 
 export async function deleteWaterPortionController(req, res) {
   const { id } = req.params;
-  const { userId } = req.user._id;
 
-  const result = await deleteWaterPortion(id, userId);
+  const result = await deleteWaterPortion(id);
 
-  res.status(200).json({
-    status: 200,
-    message: 'Entry successfully deleted!',
-    data: result,
-  });
+  res.status(200).json({ status: 200, message: 'Entry successfully deleted!', data: result });
 }

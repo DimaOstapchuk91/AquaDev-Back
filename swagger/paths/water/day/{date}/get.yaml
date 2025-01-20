@@ -13,7 +13,7 @@ parameters:
     schema:
       type: string
       format: date-time
-      example: "2025-01-19T18:25:06.956Z"
+      example: "2025-01-21"
 responses:
   '200':
     description: Data for the selected day retrieved successfully
@@ -33,7 +33,7 @@ responses:
             dateDay:
               type: string
               format: date-time
-              example: "2025-01-19T18:25:06.956Z"
+              example: "2025-01-21"
             totalWater:
               type: integer
               example: 310

@@ -12,7 +12,7 @@ parameters:
     description: The month for which water data is requested
     schema:
       type: string
-      example: "2025-01-19"
+      example: "2025-01"
 responses:
   '200':
     description: Data for the selected month retrieved successfully
@@ -39,7 +39,7 @@ responses:
                   date:
                     type: string
                     format: date
-                    example: "2025-01-11"
+                    example: "2025-01"
                   totalWater:
                     type: integer
                     example: 750

@@ -6,7 +6,7 @@ export const authSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
-  name: Joi.string().min(2).max(16),
+  name: Joi.string().min(2).max(16).allow(null),
   email: Joi.string().email(),
   gender: Joi.string().valid('woman', 'man'),
   weight: Joi.number().min(0).max(200),

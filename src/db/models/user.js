@@ -14,6 +14,13 @@ const userSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
+userSchema.pre('findOneAndUpdate', function (next) {
+  if (this._update.name === 'null') {
+    this._update.name = null;
+  }
+  next();
+});
+
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

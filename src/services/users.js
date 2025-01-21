@@ -63,13 +63,13 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   });
 
   if (!session)
-    throw createHttpError(401, 'Authentication failed. Session not found');
+    throw createHttpError(404, 'Authentication failed. Session not found');
 
   const isSessionTokenEpired =
     new Date() > new Date(session.refreshTokenValidUntil);
 
   if (isSessionTokenEpired)
-    throw createHttpError(401, 'Authentication failed. Session token expired');
+    throw createHttpError(404, 'Authentication failed. Session token expired');
 
   session.accessToken = randomBytes(30).toString('base64');
   session.refreshToken = randomBytes(30).toString('base64');

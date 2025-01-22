@@ -4,12 +4,7 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Session } from '../db/models/session.js';
 import { THIRTY_DAY, TWO_HOURS } from '../constans/constans.js';
-import {
-  getFullNameFromGoogleTokenPayload,
-  googleOAuthClient,
-  validateCode,
-} from '../utils/googleOAuth2.js';
-import { GoogleAuth, OAuth2Client } from 'google-auth-library';
+import { validateCode } from '../utils/googleOAuth2.js';
 
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
@@ -129,79 +124,29 @@ export const updateUser = async (user, userData, options = {}) => {
   };
 };
 
-export const loginOrSignupWithGoogle = async (req, res, next) => {
-  try {
-    const { code } = req.body;
-    const { tokens } = await googleOAuthClient.getToken(code);
-    googleOAuthClient.setCredentials(tokens);
-
-    const oauth2 = GoogleAuth.oauth2({
-      auth: OAuth2Client,
-      version: 'v2',
-    });
-
-    const userInfo = await oauth2.userinfo.get();
-    res.json({ user: userInfo.data });
-
-    if (!code) {
-      return res.status(400).json({
-        status: 400,
-        message: 'Authorization code is required!',
-      });
-    }
-
-    const ticket = await validateCode(code);
-    const payload = ticket.getPayload();
-
-    if (!payload.email_verified) {
-      return res.status(401).json({
-        status: 401,
-        message: 'Email not verified by Google!',
-      });
-    }
-
-    let user = await UsersCollection.findOne({ email: payload.email });
-
-    if (!user) {
-      user = await UsersCollection.create({
-        email: payload.email,
-        name: getFullNameFromGoogleTokenPayload(payload),
-        password: null,
-      });
-    }
-
-    const session = await createSession(user._id);
-
-    res.cookie('refreshToken', session.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'None',
-      expires: new Date(session.refreshTokenValidUntil),
-    });
-
-    res.cookie('sessionId', session._id, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'None',
-      expires: new Date(session.refreshTokenValidUntil),
-    });
-
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully authenticated via Google!',
-      data: {
-        accessToken: session.accessToken,
-        user: {
-          id: user._id,
-          email: user.email,
-          name: user.name,
-          avatar: user.avatar,
-        },
-      },
-    });
-  } catch (err) {
-    next(err);
+export const loginOrSignupWithGoogle = async (code) => {
+  if (!code) {
+    throw new Error('Authorization code is required!');
   }
+
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+
+  if (!payload) throw createHttpError(401);
+
+  let user = await UsersCollection.findOne({ email: payload.email });
+
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    user = await UsersCollection.create({
+      email: payload.email,
+      password: password,
+    });
+  }
+
+  const newSession = createSession();
+
+  return await Session.create({ userId: user._id, ...newSession });
 };
 // ==============================================
 

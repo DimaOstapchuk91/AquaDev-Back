@@ -2,11 +2,7 @@ import { Router } from 'express';
 import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import {
-  authSchema,
-  loginWithGoogleOAuthSchema,
-  updateUserSchema,
-} from '../validation/users.js';
+import { authSchema, updateUserSchema } from '../validation/users.js';
 import {
   gerUserController,
   getGoogleOAuthUrlController,
@@ -50,10 +46,9 @@ router.patch(
 
 router.get('/auth/google/url', ctrlWrapper(getGoogleOAuthUrlController));
 
-router.post(
+router.get(
   '/auth/google/callback',
   jsonParser,
-  validateBody(loginWithGoogleOAuthSchema),
   ctrlWrapper(loginWithGoogleController),
 );
 

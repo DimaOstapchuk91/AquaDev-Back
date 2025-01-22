@@ -142,34 +142,37 @@ export const getGoogleOAuthUrlController = async (req, res) => {
 };
 
 export const loginWithGoogleController = async (req, res) => {
-  try {
-    if (!req.body.code) {
-      return res.status(400).json({
-        status: 400,
-        message: 'Authorization code is required.',
-      });
-    }
+  const { code } = req.query;
 
-    const session = await loginOrSignupWithGoogle(req.body.code);
-
-    setupSession(res, session);
-
-    res.json({
-      status: 200,
-      message: 'Successfully logged in via Google OAuth!',
-      data: {
-        accessToken: session.accessToken,
-      },
-    });
-  } catch (err) {
-    console.log('Error during Google login:', err);
-
-    res.status(500).json({
-      status: 500,
-      message: 'Failed to login via Google OAuth.',
-      error: err.message,
+  if (!code) {
+    return res.status(400).json({
+      status: 400,
+      message: 'Authorization code is required.',
     });
   }
+
+  const session = await loginOrSignupWithGoogle(code);
+
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    expires: new Date(Date.now() + THIRTY_DAY),
+  });
+
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    expires: new Date(Date.now() + THIRTY_DAY),
+  });
+
+  console.log(session._id);
+
+  const frontendUrl = `https://aqua-dev-amber.vercel.app/google-callback`;
+  const redirectUrl = `${frontendUrl}?accessToken=${session.accessToken}`;
+
+  res.redirect(redirectUrl);
 };
 
 export const getAllUsersController = async (req, res) => {
